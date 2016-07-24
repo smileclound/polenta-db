@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import com.polenta.db.processor.SocketProcessor;
+
 public class PolentaInstance {
 
 	private int port;
@@ -24,12 +26,12 @@ public class PolentaInstance {
 			System.out.println("Impossible to open port " + this.port + ". Verify if it is not already in use.");
 			return;
 		}		
-		System.out.println("Polenta running and waiting for statements!");
+		System.out.println("Polenta running and waiting for statements and commands!");
 		
 		while (true) {
 			try {
 				Socket clientSocket = serverSocket.accept();
-				StatementProcessor processor = new StatementProcessor(clientSocket.getInputStream(), clientSocket.getOutputStream());
+				SocketProcessor processor = new SocketProcessor(clientSocket.getInputStream(), clientSocket.getOutputStream());
 				Thread thread = new Thread(processor);
 				thread.start();
 			} catch (IOException e) {
