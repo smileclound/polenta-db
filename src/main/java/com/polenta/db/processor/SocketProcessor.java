@@ -25,15 +25,20 @@ public class SocketProcessor implements Runnable {
 			statement = in.readLine();
 			//while ((inputLine = in.readLine()) != null) {
 			System.out.println("Statement received:\n" + statement);
-			StatementProcessor processor = StatementProcessorBuilder.build(statement);
-			processor.processStatement(statement);
-			out.println("Statement received.");
+			StatementProcessor processor = new StatementProcessor(statement);
+			@SuppressWarnings("unused")
+			String result = processor.execute();
+			out.println("Statement processed.");
 			out.flush();
 		} catch (IOException e) {
 			out.println("Failed to read statement from socket.");
 			out.flush();
 			e.printStackTrace();
 		} catch (InvalidStatementException e) {
+			out.println("Failed to process statement.");
+			out.flush();
+			e.printStackTrace();
+		} catch (Exception e) {
 			out.println("Failed to process statement.");
 			out.flush();
 			e.printStackTrace();
