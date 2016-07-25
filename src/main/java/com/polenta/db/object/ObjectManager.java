@@ -4,6 +4,7 @@ import java.lang.reflect.AnnotatedType;
 import java.util.List;
 import java.util.Map;
 
+import com.polenta.db.exception.PolentaException;
 import com.polenta.db.object.behavior.Alterable;
 import com.polenta.db.object.behavior.Creatable;
 import com.polenta.db.object.behavior.Deletable;
@@ -60,12 +61,12 @@ public class ObjectManager {
 	public static void performAlter(Class clazz, Map<String, Object> newDefinitions) {
 	}
 	
-	public static void performCreate(Class clazz, Map<String, Object> definitionValues) {
+	public static void performCreate(Class clazz, String name, Map<String, KeyValue> definitionValues) throws PolentaException {
 		if (Bag.class.isAssignableFrom(clazz)) {
-			Bag.getInstance().create(definitionValues);
+			Bag.getInstance().create(name, definitionValues);
 		}
 		if (User.class.isAssignableFrom(clazz)) {
-			User.getInstance().create(definitionValues);
+			User.getInstance().create(name, definitionValues);
 		}
 	}
 
@@ -75,9 +76,9 @@ public class ObjectManager {
 		}
 	}
 
-	public static void performDrop(Class clazz) {
+	public static void performDrop(Class clazz, String objectName) {
 		if (Bag.class.isAssignableFrom(clazz)) {
-			Bag.getInstance().drop();
+			Bag.getInstance().drop(objectName);
 		}
 	}
 

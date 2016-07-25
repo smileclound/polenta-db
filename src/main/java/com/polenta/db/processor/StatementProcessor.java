@@ -2,8 +2,10 @@ package com.polenta.db.processor;
 
 import java.util.Map;
 
+import com.polenta.db.MetadataStore;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.OperationNotSupportedException;
+import com.polenta.db.object.KeyValue;
 import com.polenta.db.object.ObjectManager;
 
 public class StatementProcessor {
@@ -22,37 +24,62 @@ public class StatementProcessor {
 		if (words.length == 0) {
 			throw new InvalidStatementException();
 		}
-		String operation = words[0];
+		String operation = words[0].toUpperCase();
 		if (!isOperationSupported(operation)) { 
 			throw new OperationNotSupportedException();
 		}
-		boolean objectRequired = isObjectTypeRequired(operation);
-		if (words.length == 1 && objectRequired) {
-			throw new InvalidStatementException();
-		}
-		if (objectRequired) {
-			String objectType = words[1];
+		boolean objectTypeRequired = isObjectTypeRequired(operation);
+		boolean objectNameRequired = isObjectNameRequired(operation);
+		if (objectTypeRequired) {
+			//if object type is required statement needs to have at least two words 
+			if (words.length == 1 && objectTypeRequired) {
+				throw new InvalidStatementException();
+			}
+			String objectType = words[1].toUpperCase();
+			//check if object type is supported
 			Class clazz = ObjectManager.retrieveObjectTypeClass(objectType);
 			if (clazz == null) {
 				throw new InvalidStatementException();
 			}
+			//check if operation is supported by object type
 			if (!ObjectManager.isOperationSupportedByObjectType(clazz, operation)) {
 				throw new InvalidStatementException();
 			}
-			if (operation.equalsIgnoreCase("ALTER")) {
-				ObjectManager.performAlter(clazz, extractNewDefinitions(statement));
-			} else if (operation.equalsIgnoreCase("CREATE")) {
-				ObjectManager.performCreate(clazz, null);
-			} else if (operation.equalsIgnoreCase("DELETE")) {
-				ObjectManager.performDelete(clazz, null);
-			} else if (operation.equalsIgnoreCase("DROP")) {
-				ObjectManager.performDrop(clazz);
-			} else if (operation.equalsIgnoreCase("INSERT")) {
-				ObjectManager.performInsert(clazz, null);
-			} else if (operation.equalsIgnoreCase("SELECT")) {
-				ObjectManager.performSelect(clazz, null, null);
-			} else if (operation.equalsIgnoreCase("UPDATE")) {
-				ObjectManager.performUpdate(clazz, null, null);
+			if (objectNameRequired) {
+				//if object name is required statement needs to have at least three words 
+				if (words.length == 2 && objectTypeRequired) {
+					throw new InvalidStatementException();
+				}
+				String objectName = words[2].toUpperCase();
+				if (operation.equalsIgnoreCase("CREATE")) {
+					ObjectManager.performCreate(clazz, objectName, extractDefinitions(statement));
+				}
+			} else {
+				if (operation.equalsIgnoreCase("ALTER")) {
+					ObjectManager.performAlter(clazz, extractNewDefinitions(statement));
+				} else if (operation.equalsIgnoreCase("DELETE")) {
+					ObjectManager.performDelete(clazz, null);
+				} else if (operation.equalsIgnoreCase("INSERT")) {
+					ObjectManager.performInsert(clazz, null);
+				} else if (operation.equalsIgnoreCase("SELECT")) {
+					ObjectManager.performSelect(clazz, null, null);
+				} else if (operation.equalsIgnoreCase("UPDATE")) {
+					ObjectManager.performUpdate(clazz, null, null);
+				}
+			}
+		} else if (objectNameRequired) {
+			//if object name is required statement needs to have at least two words 
+			if (words.length == 1 && objectTypeRequired) {
+				throw new InvalidStatementException();
+			}
+			String objectName = words[1].toUpperCase();
+			Class clazz = MetadataStore.getInstance().retrieveObjectClass(objectName);
+			if (clazz == null) {
+				throw new InvalidStatementException();
+			} else {
+				if (operation.equalsIgnoreCase("DROP")) {
+					ObjectManager.performDrop(clazz, objectName);
+				} 
 			}
 		}
 		return "";
@@ -78,9 +105,23 @@ public class StatementProcessor {
 				operation.equalsIgnoreCase("SELECT") ||
 				operation.equalsIgnoreCase("UPDATE");
 	}
-	
+
+	protected boolean isObjectNameRequired(String operation) {
+		return operation.equalsIgnoreCase("ALTER") ||
+				operation.equalsIgnoreCase("CREATE") ||
+				operation.equalsIgnoreCase("DELETE") ||
+				operation.equalsIgnoreCase("DROP") ||
+				operation.equalsIgnoreCase("INSERT") ||
+				operation.equalsIgnoreCase("SELECT") ||
+				operation.equalsIgnoreCase("UPDATE");
+	}
+
 	protected Map<String, Object> extractNewDefinitions(String statement) {
 		return null;
 	}
-	
+
+	protected Map<String, KeyValue> extractDefinitions(String statement) {
+		return null;
+	}
+
 }
