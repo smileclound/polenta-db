@@ -7,10 +7,12 @@ import com.polenta.db.Command;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
 import com.polenta.db.object.ObjectManager;
+import com.polenta.db.object.type.Bag;
+import com.polenta.db.object.type.User;
 
 public class CreateCommand implements Command {
 
-	String statement;
+	private String statement;
 	
 	public void setStatement(String statement) {
 		this.statement = statement;
@@ -45,6 +47,14 @@ public class CreateCommand implements Command {
 		return definitions;
 	}
 
+	protected void performCreate(Class clazz, String name, Map<String, String> definitionValues) throws PolentaException {
+		if (Bag.class.isAssignableFrom(clazz)) {
+			Bag.getInstance().create(name, definitionValues);
+		}
+		if (User.class.isAssignableFrom(clazz)) {
+			User.getInstance().create(name, definitionValues);
+		}
+	}
 	
 	
 
