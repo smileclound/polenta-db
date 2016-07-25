@@ -17,6 +17,7 @@ public class StatementProcessor {
 		if (this.statement == null || this.statement.trim().equals("")) {
 			throw new InvalidStatementException();
 		}
+
 		String[] words = statement.split(" ");
 		if (words.length == 0) {
 			throw new InvalidStatementException();
@@ -24,67 +25,11 @@ public class StatementProcessor {
 		
 		Command command = CommandBuilder.getInstance().build(statement);
 		
-		
 		if (command == null) { 
 			throw new NotSupportedOperationException();
 		}
 		
 		return command.execute();
-		
-//		boolean objectTypeRequired = isObjectTypeRequired(operation);
-//		boolean objectNameRequired = isObjectNameRequired(operation);
-//		if (objectTypeRequired) {
-//			//if object type is required statement needs to have at least two words 
-//			if (words.length == 1 && objectTypeRequired) {
-//				throw new InvalidStatementException();
-//			}
-//			String objectType = words[1].toUpperCase();
-//			//check if object type is supported
-//			Class clazz = ObjectManager.retrieveObjectTypeClass(objectType);
-//			if (clazz == null) {
-//				throw new InvalidStatementException();
-//			}
-//			//check if operation is supported by object type
-//			if (!ObjectManager.isOperationSupportedByObjectType(clazz, operation)) {
-//				throw new InvalidStatementException();
-//			}
-//			if (objectNameRequired) {
-//				//if object name is required statement needs to have at least three words 
-//				if (words.length == 2 && objectTypeRequired) {
-//					throw new InvalidStatementException();
-//				}
-//				String objectName = words[2].toUpperCase();
-//				if (operation.equalsIgnoreCase("CREATE")) {
-//					ObjectManager.performCreate(clazz, objectName, extractNewObjectDefinitions());
-//				}
-//			} else {
-//				if (operation.equalsIgnoreCase("ALTER")) {
-//					ObjectManager.performAlter(clazz, extractExistingObjectNewDefinitions());
-//				} else if (operation.equalsIgnoreCase("DELETE")) {
-//					ObjectManager.performDelete(clazz, null);
-//				} else if (operation.equalsIgnoreCase("INSERT")) {
-//					ObjectManager.performInsert(clazz, null);
-//				} else if (operation.equalsIgnoreCase("SELECT")) {
-//					ObjectManager.performSelect(clazz, null, null);
-//				} else if (operation.equalsIgnoreCase("UPDATE")) {
-//					ObjectManager.performUpdate(clazz, null, null);
-//				}
-//			}
-//		} else if (objectNameRequired) {
-//			//if object name is required statement needs to have at least two words 
-//			if (words.length == 1 && objectTypeRequired) {
-//				throw new InvalidStatementException();
-//			}
-//			String objectName = words[1].toUpperCase();
-//			Class clazz = MetadataStore.getInstance().retrieveObjectClass(objectName);
-//			if (clazz == null) {
-//				throw new InvalidStatementException();
-//			} else {
-//				if (operation.equalsIgnoreCase("DROP")) {
-//					ObjectManager.performDrop(clazz, objectName);
-//				} 
-//			}
-//		}
 	}
 
 }
