@@ -26,7 +26,7 @@ public class CreateCommand implements Command {
 			throw new InvalidStatementException();
 		}
 		
-		ObjectManager.performCreate(clazz, objectName, objectDefinitions);
+		ObjectManager.performCreate(clazz, objectName.toUpperCase(), objectDefinitions);
 		
 		return "OK";
 	}
@@ -40,7 +40,7 @@ public class CreateCommand implements Command {
 			if (definitionSubParts.length != 2) {
 				throw new InvalidStatementException();
 			}
-			definitions.put(definitionSubParts[0], definitionSubParts[1]);
+			definitions.put(definitionSubParts[0].toUpperCase(), definitionSubParts[1].toUpperCase());
 		}
 		return definitions;
 	}
