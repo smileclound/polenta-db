@@ -8,7 +8,6 @@ import com.polenta.db.MetadataStore;
 import com.polenta.db.exception.BagAlreadyExistsException;
 import com.polenta.db.exception.ObjectAlreadyExistsException;
 import com.polenta.db.exception.PolentaException;
-import com.polenta.db.object.KeyValue;
 import com.polenta.db.object.behavior.Creatable;
 import com.polenta.db.object.behavior.Dropable;
 import com.polenta.db.object.behavior.Insertable;
@@ -21,7 +20,7 @@ public class Bag implements Creatable, Insertable, Selectable, Dropable {
 		
 	}
 	
-	private Map<String, Map<String, KeyValue>> bags = new HashMap<String, Map<String, KeyValue>>();
+	private Map<String, Map<String, String>> bags = new HashMap<String, Map<String, String>>();
 	
 	private static Bag INSTANCE = new Bag();
 	
@@ -45,7 +44,7 @@ public class Bag implements Creatable, Insertable, Selectable, Dropable {
 		
 	}
 
-	public void create(String bagName, Map<String, KeyValue> definitionValues) throws PolentaException {
+	public void create(String bagName, Map<String, String> definitionValues) throws PolentaException {
 		//join verify and add in atomic operation?
 		if (MetadataStore.getInstance().containsObject(bagName)) {
 			throw new ObjectAlreadyExistsException();

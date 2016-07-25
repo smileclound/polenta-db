@@ -3,7 +3,6 @@ package com.polenta.db.object.type;
 import java.util.List;
 import java.util.Map;
 
-import com.polenta.db.object.KeyValue;
 import com.polenta.db.object.behavior.Creatable;
 import com.polenta.db.object.behavior.Deletable;
 import com.polenta.db.object.behavior.Selectable;
@@ -36,7 +35,7 @@ public class User implements Creatable, Updatable, Selectable, Deletable {
 		
 	}
 
-	public void create(String name, Map<String, KeyValue> definitionValues) {
+	public void create(String name, Map<String, String> definitionValues) {
 		// TODO Auto-generated method stub
 		
 	}

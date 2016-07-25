@@ -61,7 +61,7 @@ public class ObjectManager {
 	public static void performAlter(Class clazz, Map<String, Object> newDefinitions) {
 	}
 	
-	public static void performCreate(Class clazz, String name, Map<String, KeyValue> definitionValues) throws PolentaException {
+	public static void performCreate(Class clazz, String name, Map<String, String> definitionValues) throws PolentaException {
 		if (Bag.class.isAssignableFrom(clazz)) {
 			Bag.getInstance().create(name, definitionValues);
 		}

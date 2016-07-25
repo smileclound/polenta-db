@@ -25,7 +25,7 @@ public class SocketProcessor implements Runnable {
 			statement = in.readLine();
 			//while ((inputLine = in.readLine()) != null) {
 			System.out.println("Statement received:\n" + statement);
-			StatementProcessor processor = new StatementProcessor(statement);
+			StatementProcessor processor = new StatementProcessor(statement.trim());
 			@SuppressWarnings("unused")
 			String result = processor.execute();
 			out.println("Statement processed.");
