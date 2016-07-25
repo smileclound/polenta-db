@@ -1,17 +1,16 @@
 package com.polenta.db.command;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Map;
 
 import org.junit.Test;
 
-import com.polenta.db.exception.PolentaException;
-
-import static org.junit.Assert.*;
-
 public class CreateCommandTest {
 
 	@Test
-	public void testCreateBagExtractDefinitions() throws PolentaException {
+	public void testCreateBagExtractDefinitions() throws Exception {
 		CreateCommand command = new CreateCommand();
 		command.setStatement("CREATE BAG (NAME STRING, BIRTH DATE, ZIP INTEGER, SALARY DOUBLE)");
 		

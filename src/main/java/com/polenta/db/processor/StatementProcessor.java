@@ -3,7 +3,7 @@ package com.polenta.db.processor;
 import com.polenta.db.Command;
 import com.polenta.db.CommandBuilder;
 import com.polenta.db.exception.InvalidStatementException;
-import com.polenta.db.exception.OperationNotSupportedException;
+import com.polenta.db.exception.NotSupportedOperationException;
 
 public class StatementProcessor {
 	
@@ -26,7 +26,7 @@ public class StatementProcessor {
 		
 		
 		if (command == null) { 
-			throw new OperationNotSupportedException();
+			throw new NotSupportedOperationException();
 		}
 		
 		return command.execute();
