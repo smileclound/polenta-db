@@ -28,7 +28,8 @@ public class SocketProcessor implements Runnable {
 			StatementProcessor processor = new StatementProcessor(statement.trim());
 			@SuppressWarnings("unused")
 			String result = processor.execute();
-			out.println("Statement processed.");
+			System.out.println("Statement executed. Result:\n" + result);
+			out.println(result);
 			out.flush();
 		} catch (IOException e) {
 			out.println("Failed to read statement from socket.");
