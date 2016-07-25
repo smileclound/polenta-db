@@ -4,9 +4,10 @@ import com.polenta.db.Command;
 
 public class ShutdownCommand implements Command {
 
+	private String statement;
+	
 	public void setStatement(String statement) {
-		// TODO Auto-generated method stub
-		
+		this.statement = statement;
 	}
 
 	public String execute() {

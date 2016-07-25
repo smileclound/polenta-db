@@ -87,38 +87,4 @@ public class StatementProcessor {
 //		}
 	}
 
-//	protected boolean isOperationSupported(String operation) {
-//		return operation.equalsIgnoreCase("ALTER") ||
-//				operation.equalsIgnoreCase("CREATE") ||
-//				operation.equalsIgnoreCase("DELETE") ||
-//				operation.equalsIgnoreCase("DROP") ||
-//				operation.equalsIgnoreCase("INSERT") ||
-//				operation.equalsIgnoreCase("SELECT") ||
-//				operation.equalsIgnoreCase("UPDATE");
-//	}
-//	
-//	protected boolean isObjectTypeRequired(String operation) {
-//		return operation.equalsIgnoreCase("ALTER") ||
-//				operation.equalsIgnoreCase("CREATE") ||
-//				operation.equalsIgnoreCase("DELETE") ||
-//				operation.equalsIgnoreCase("DROP") ||
-//				operation.equalsIgnoreCase("INSERT") ||
-//				operation.equalsIgnoreCase("SELECT") ||
-//				operation.equalsIgnoreCase("UPDATE");
-//	}
-//
-//	protected boolean isObjectNameRequired(String operation) {
-//		return operation.equalsIgnoreCase("ALTER") ||
-//				operation.equalsIgnoreCase("CREATE") ||
-//				operation.equalsIgnoreCase("DELETE") ||
-//				operation.equalsIgnoreCase("DROP") ||
-//				operation.equalsIgnoreCase("INSERT") ||
-//				operation.equalsIgnoreCase("SELECT") ||
-//				operation.equalsIgnoreCase("UPDATE");
-//	}
-//
-//	protected Map<String, Object> extractExistingObjectNewDefinitions() {
-//		return null;
-//	}
-
 }
