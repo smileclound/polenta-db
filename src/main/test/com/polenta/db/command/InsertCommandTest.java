@@ -24,13 +24,13 @@ public class InsertCommandTest {
 	@Test
 	public void testExtractRawFieldValues() throws Exception {
 		InsertCommand command = new InsertCommand();
-		command.setStatement("INSERT INTO MY_BAG (NAME, SALARY, BIRTH, ZIP) VALUES ('PAULO REZENDE', 1000.00, 12/30/2000, 01000)");
+		command.setStatement("INSERT INTO MY_BAG (NAME, SALARY, BIRTH, ZIP) VALUES ('PAULO REZENDE', 1000.00, 2000-01-01, 01000)");
 		List<String> fields = command.extractRawFieldValues();
 		assertTrue(fields != null);
 		assertEquals(4, fields.size());
 		assertEquals("'PAULO REZENDE'", fields.get(0));
 		assertEquals("1000.00", fields.get(1));
-		assertEquals("12/30/2000", fields.get(2));
+		assertEquals("2000-01-01", fields.get(2));
 		assertEquals("01000", fields.get(3));
 	}
 

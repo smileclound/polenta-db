@@ -60,7 +60,7 @@ public class InsertCommand implements Command {
 		
 		validateFieldNames(fields, metadata);
 		
-		List<Object> convertedFields = convertFields(values, metadata);
+		List<Object> convertedFields = convertFields(fields, values, metadata);
 		
 		Map<String, Object> insertValues = new HashMap<String, Object>();
 		
@@ -125,8 +125,21 @@ public class InsertCommand implements Command {
 		}
 	}
 	
-	public List<Object> convertFields(List<String> values, Map<String, String> metadata) {
+	public List<Object> convertFields(List<String> fields, List<String> values, Map<String, String> metadata) {
 		List<Object> valuesList = new ArrayList<Object>();
+		
+		for (int i = 0; i <= fields.size() - 1; i++) {
+			
+			String field = fields.get(i);
+			String value = values.get(i);
+			String type = metadata.get(field);
+			
+			if (type.equals("STRING")) {
+				valuesList.add(value);
+			}
+			
+		}
+		
 		
 		return valuesList;
 	}

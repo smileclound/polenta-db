@@ -10,7 +10,7 @@ A bag is a set of rows without primary key. It's not possible to delete data fro
 <pre>
 CREATE BAG [BAG_NAME] ([FIELD_NAME FIELD_TYPE], [FIELD_NAME FIELD_TYPE], ...) 
 
-   Supported field types: STRING, INTEGER, DATE, DOUBLE
+   Supported field types: STRING, INTEGER, DATE (YYYY-MM-DD), DOUBLE
 
 INSERT INTO [BAG_NAME] ( [FIELD_NAME], [FIELD_NAME, ...) VALUES ([VALUE, [VALUE, ...)
 
