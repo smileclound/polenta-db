@@ -1,4 +1,4 @@
-package com.polenta.db.command;
+package com.polenta.db.command.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.junit.Test;
+
+import com.polenta.db.command.impl.CreateCommand;
 
 public class CreateCommandTest {
 

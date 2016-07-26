@@ -1,4 +1,4 @@
-package com.polenta.db;
+package com.polenta.db.command;
 
 import com.polenta.db.exception.PolentaException;
 

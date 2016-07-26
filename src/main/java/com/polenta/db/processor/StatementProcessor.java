@@ -1,7 +1,7 @@
 package com.polenta.db.processor;
 
-import com.polenta.db.Command;
-import com.polenta.db.CommandBuilder;
+import com.polenta.db.command.Command;
+import com.polenta.db.command.CommandBuilder;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.NotSupportedOperationException;
 

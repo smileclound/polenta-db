@@ -1,8 +1,8 @@
-package com.polenta.db.command;
+package com.polenta.db.command.impl;
 
 import java.util.Map;
 
-import com.polenta.db.Command;
+import com.polenta.db.command.Command;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
 import com.polenta.db.object.type.User;

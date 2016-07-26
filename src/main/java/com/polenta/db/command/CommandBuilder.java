@@ -1,13 +1,13 @@
-package com.polenta.db;
+package com.polenta.db.command;
 
-import com.polenta.db.command.AlterCommand;
-import com.polenta.db.command.CreateCommand;
-import com.polenta.db.command.DeleteCommand;
-import com.polenta.db.command.DropCommand;
-import com.polenta.db.command.InsertCommand;
-import com.polenta.db.command.SelectCommand;
-import com.polenta.db.command.ShutdownCommand;
-import com.polenta.db.command.UpdateCommand;
+import com.polenta.db.command.impl.AlterCommand;
+import com.polenta.db.command.impl.CreateCommand;
+import com.polenta.db.command.impl.DeleteCommand;
+import com.polenta.db.command.impl.DropCommand;
+import com.polenta.db.command.impl.InsertCommand;
+import com.polenta.db.command.impl.SelectCommand;
+import com.polenta.db.command.impl.ShutdownCommand;
+import com.polenta.db.command.impl.UpdateCommand;
 
 public class CommandBuilder {
 
