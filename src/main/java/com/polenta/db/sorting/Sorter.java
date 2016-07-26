@@ -15,7 +15,7 @@ public abstract class Sorter {
 		String field = criteria.split(" ")[0];
 		String direction;
 		try {
-			direction = criteria.split(" ")[0];
+			direction = criteria.split(" ")[1];
 		} catch (Exception e) {
 			direction = "ASC";
 		}
