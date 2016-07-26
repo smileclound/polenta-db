@@ -18,9 +18,9 @@ public class DropCommand implements Command {
 		return null;
 	}
 
-	public static void performDrop(Class clazz, String objectName) throws PolentaException {
+	public static void performDrop(String name, Class clazz, String objectName) throws PolentaException {
 		if (Bag.class.isAssignableFrom(clazz)) {
-			Bag.getInstance().drop(objectName);
+			Bag.get(name).drop();
 		} else {
 			throw new InvalidStatementException("DROP is not supported by this object type.");
 		}

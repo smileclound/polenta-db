@@ -2,6 +2,6 @@ package com.polenta.db.object.behavior;
 
 public interface Dropable {
 
-	public void drop(String objectName);
+	public void drop();
 	
 }

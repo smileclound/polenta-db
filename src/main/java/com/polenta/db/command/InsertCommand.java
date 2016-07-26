@@ -1,12 +1,15 @@
 package com.polenta.db.command;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.polenta.db.Command;
-import com.polenta.db.MetadataStore;
+import com.polenta.db.catalog.Catalog;
+import com.polenta.db.catalog.CatalogItem;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
 import com.polenta.db.object.type.Bag;
@@ -14,6 +17,8 @@ import com.polenta.db.object.type.Bag;
 public class InsertCommand implements Command {
 
 	private String statement;
+	
+	private static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public void setStatement(String statement) {
 		this.statement = statement;
@@ -40,13 +45,14 @@ public class InsertCommand implements Command {
 			throw new InvalidStatementException("Object name must be defined on INSERT statement.");
 		}
 		
-		Class clazz = MetadataStore.getInstance().retrieveObjectClass(objectName);
-		if (clazz == null) {
+		CatalogItem catalogItem = Catalog.getInstance().get(objectName);  
+
+		if (catalogItem == null) {
 			throw new InvalidStatementException("Object does not exist.");
 		}
 		
 		//change this
-		if (!Bag.class.isAssignableFrom(clazz)) {
+		if (!Bag.class.isAssignableFrom(catalogItem.getClazz())) {
 			throw new InvalidStatementException("INSERT is not supported by this object type.");	
 		}
 		
@@ -56,11 +62,9 @@ public class InsertCommand implements Command {
 			throw new InvalidStatementException("Number of fields and values on INSERT statement need to match.");
 		}
 		
-		Map<String, String> metadata = retrieveMetadata(clazz, objectName);
+		validateFieldNames(fields, catalogItem);
 		
-		validateFieldNames(fields, metadata);
-		
-		List<Object> convertedFields = convertFields(fields, values, metadata);
+		List<Object> convertedFields = convertFields(fields, values, catalogItem);
 		
 		Map<String, Object> insertValues = new HashMap<String, Object>();
 		
@@ -68,14 +72,14 @@ public class InsertCommand implements Command {
 			insertValues.put(fields.get(i), convertedFields.get(i));
 		}
 		
-		performInsert(clazz, insertValues);
+		performInsert(objectName, catalogItem.getClazz(), insertValues);
 			
 		return "OK";
 	}
 
-	public void performInsert(Class clazz, Map<String, Object> insertValues) throws PolentaException {
+	public void performInsert(String name, Class clazz, Map<String, Object> insertValues) throws PolentaException {
 		if (Bag.class.isAssignableFrom(clazz)) {
-			Bag.getInstance().insert(insertValues);
+			Bag.get(name).insert(insertValues);
 		} else {
 			throw new InvalidStatementException("INSERT is not supported by this object type.");
 		}
@@ -109,37 +113,47 @@ public class InsertCommand implements Command {
 		return valuesList;
 	}
 
-	public void validateFieldNames(List<String> fields, Map<String, String> metadata) throws PolentaException {
+	public void validateFieldNames(List<String> fields, CatalogItem catalogItem) throws PolentaException {
 		for (String field: fields) {
-			if (!metadata.containsKey(field)) {
+			if (!catalogItem.hasDefinitionKey(field)) {
 				throw new InvalidStatementException("Field " + field + " not defined for this object.");
 			}
 		}
 	}	
 	
-	public Map<String, String> retrieveMetadata(Class clazz, String objectName) {
-		if (Bag.class.isAssignableFrom(clazz)) {
-			return Bag.getInstance().retrieveMetadataForObject(objectName);
-		} else {
-			return null;
-		}
-	}
-	
-	public List<Object> convertFields(List<String> fields, List<String> values, Map<String, String> metadata) {
+	public List<Object> convertFields(List<String> fields, List<String> values, CatalogItem catalogItem) throws PolentaException {
 		List<Object> valuesList = new ArrayList<Object>();
 		
 		for (int i = 0; i <= fields.size() - 1; i++) {
-			
 			String field = fields.get(i);
 			String value = values.get(i);
-			String type = metadata.get(field);
+			String type = catalogItem.getDefinitionValue(field);
 			
 			if (type.equals("STRING")) {
 				valuesList.add(value);
+			} else if (type.equals("INTEGER")) {
+				try {
+					Integer convertedValue = Integer.parseInt(value);
+					valuesList.add(convertedValue);
+				} catch (Exception e) {
+					throw new InvalidStatementException("Value of field " + field + " needs to be INTEGER.");
+				}
+			} else if (type.equals("DOUBLE")) {
+				try {
+					Double convertedValue = Double.parseDouble(value);
+					valuesList.add(convertedValue);
+				} catch (Exception e) {
+					throw new InvalidStatementException("Value of field " + field + " needs to be DOUBLE.");
+				}
+			} else if (type.equals("DATE")) {
+				try {
+					Date convertedValue = DATE_FORMATTER.parse(value);
+					valuesList.add(convertedValue);
+				} catch (Exception e) {
+					throw new InvalidStatementException("Value of field " + field + " needs to be DATE (YYYY-MM-DD).");
+				}
 			}
-			
 		}
-		
 		
 		return valuesList;
 	}

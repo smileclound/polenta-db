@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.polenta.db.Command;
-import com.polenta.db.MetadataStore;
+import com.polenta.db.catalog.Catalog;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
 import com.polenta.db.object.type.Bag;
@@ -51,7 +51,7 @@ public class CreateCommand implements Command {
 			throw new InvalidStatementException("Fields must be defined on CREATE statement.");
 		}
 		
-		Class clazz = MetadataStore.retrieveObjectTypeClass(objectType);
+		Class clazz = Catalog.retrieveObjectTypeClass(objectType);
 		if (clazz == null) {
 			throw new InvalidStatementException("Object type is not supported by Polenta.");
 		}
@@ -89,9 +89,9 @@ public class CreateCommand implements Command {
 	protected void performCreate(Class clazz, String name, Map<String, String> definitionValues) throws PolentaException {
 		//refactor to avoid if's
 		if (Bag.class.isAssignableFrom(clazz)) {
-			Bag.getInstance().create(name, definitionValues);
+			Bag.create(name, definitionValues);
 		} else if (User.class.isAssignableFrom(clazz)) {
-			User.getInstance().create(name, definitionValues);
+			User.create(name, definitionValues);
 		} else {
 			throw new InvalidStatementException("CREATE is not supported by this object type.");
 		}

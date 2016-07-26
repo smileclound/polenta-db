@@ -23,9 +23,9 @@ public class SelectCommand implements Command {
 	}
 
 	
-	public static void performSelect(Class clazz, List<String> returnFields, Map<String, Object> filterValues) throws PolentaException {
+	public static void performSelect(String name, Class clazz, List<String> returnFields, Map<String, Object> filterValues) throws PolentaException {
 		if (Bag.class.isAssignableFrom(clazz)) {
-			Bag.getInstance().select(returnFields, filterValues);
+			Bag.get(name).select(returnFields, filterValues);
 		} else if (User.class.isAssignableFrom(clazz)) {
 			User.getInstance().select(returnFields, filterValues);
 		} else {
