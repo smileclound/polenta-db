@@ -63,4 +63,29 @@ public class SelectCommandTest {
 		
 	}
 
+	@Test
+	public void testExtractOrderByFieldsWhenClausuleDoesntExist() throws PolentaException {
+		SelectCommand command = new SelectCommand();
+		command.setStatement("SELECT NAME, SALARY, ZIP FROM MY_BAG");
+		List<String> fields = command.extractOrderByFields();
+		assertEquals(0, fields.size());
+	}
+
+	@Test
+	public void testExtractOrderByFieldsWhenClausuleEmpty() throws PolentaException {
+		SelectCommand command = new SelectCommand();
+		command.setStatement("SELECT NAME, SALARY, ZIP FROM MY_BAG ORDER BY");
+		List<String> fields = command.extractOrderByFields();
+		assertEquals(0, fields.size());
+	}
+
+	@Test
+	public void testExtractOrderByFields() throws PolentaException {
+		SelectCommand command = new SelectCommand();
+		command.setStatement("SELECT NAME, SALARY, ZIP FROM MY_BAG ORDER BY SALARY");
+		List<String> fields = command.extractOrderByFields();
+		assertEquals(1, fields.size());
+		assertEquals("SALARY", fields.get(0));
+	}
+
 }

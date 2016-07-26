@@ -33,19 +33,23 @@ public class SelectCommand implements Command {
 			throw new InvalidStatementException("Object does not exist.");
 		}
 		
-		List<String> selectFields = extractOrderFields();
-		Map<String, Object> whereConditions = extractWhereConditions();
-		List<String> orderFields = extractOrderFields();
+		List<String> selectFields = extractSelectFields();
+		if (selectFields == null || selectFields.isEmpty()) {
+			throw new InvalidStatementException("SELECT must list fields to be returned.");
+		}
 		
-		if (orderFields.size() > 1) {
+		Map<String, Object> whereConditions = extractWhereConditions();
+		List<String> orderByFields = extractOrderByFields();
+		
+		if (orderByFields.size() > 1) {
 			throw new InvalidStatementException("ORDER BY does not support (yet!) more than a field.");
 		}
-		for (String orderField: orderFields) {
+		for (String orderField: orderByFields) {
 			if (!selectFields.contains(orderField)) {
 				throw new InvalidStatementException("Field in ORDER BY clausule needs to be listed on SELECT clausule.");
 			}
 		}
-		Map<String, Object> result = performSelect(objectName, catalogItem.getClazz(), selectFields, whereConditions, orderFields);
+		Map<String, Object> result = performSelect(objectName, catalogItem.getClazz(), selectFields, whereConditions, orderByFields);
 		return formatResultToTransport(result);
 	}
 	
@@ -86,14 +90,28 @@ public class SelectCommand implements Command {
 		return conditions;
 	}
 
-	protected List<String> extractOrderFields() throws PolentaException {
+	protected List<String> extractOrderByFields() throws PolentaException {
 		List<String> fields = new ArrayList<String>();
+		if (statement.indexOf("ORDER BY") == -1) {
+			return fields;
+		}
+		try {
+			String orderByFields = statement.trim().substring(statement.indexOf("ORDER BY") + 8);
+			if (orderByFields == null || orderByFields.trim().length() == 0) {
+				return fields;
+			}
+			for (String field: orderByFields.split(",")) {
+				fields.add(field.trim());
+			}
+		} catch (Exception e) {
+			throw new PolentaException("Polent couldn't parse ORDER BY and extract selected fields.");
+		}
 		return fields;
 	}
 
-	protected Map<String, Object> performSelect(String name, @SuppressWarnings("rawtypes") Class clazz, List<String> selectFields, Map<String, Object> whereConditions, List<String> orderFields) throws PolentaException {
+	protected Map<String, Object> performSelect(String name, @SuppressWarnings("rawtypes") Class clazz, List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
 		if (Bag.class.isAssignableFrom(clazz)) {
-			return Bag.get(name).select(selectFields, whereConditions, orderFields);
+			return Bag.get(name).select(selectFields, whereConditions, orderByFields);
 		} else if (User.class.isAssignableFrom(clazz)) {
 			return null; //User.getInstance().select(selectFields, whereConditions, orderFields);
 		} else {
