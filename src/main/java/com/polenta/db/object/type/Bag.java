@@ -40,7 +40,7 @@ public class Bag implements Insertable, Selectable, Dropable {
 		BAGS.remove(this.name);
 	}
 
-	public Map<String, Object> select(List<String> returnFields, Map<String, Object> filterValues) {
+	public Map<String, Object> select(List<String> selectFields, Map<String, Object> whereConditions, List<String> orderFields) {
 		// TODO Auto-generated method stub
 		return null;
 	}

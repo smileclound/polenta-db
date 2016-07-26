@@ -5,6 +5,6 @@ import java.util.Map;
 
 public interface Selectable {
 
-	public Map<String, Object> select(List<String> returnFields, Map<String, Object> filterValues);
+	public Map<String, Object> select(List<String> selectFields, Map<String, Object> whereConditions, List<String> orderFields);
 	
 }
