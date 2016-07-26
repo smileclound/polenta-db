@@ -69,7 +69,7 @@ public class CreateCommand implements Command {
 			for (String fields: fieldsList) {
 				String[] fieldDefinitions = fields.trim().split(" ");
 				if (fieldDefinitions.length != 2) {
-					throw new InvalidStatementException();
+					throw new InvalidStatementException("Invalid syntax of CREATE command.");
 				}
 				String fieldName = fieldDefinitions[0].toUpperCase();
 				String fieldType = fieldDefinitions[1].toUpperCase();
@@ -79,7 +79,7 @@ public class CreateCommand implements Command {
 				definitions.put(fieldName, fieldType);
 			}
 		} catch (InvalidStatementException e) {
-			throw new InvalidStatementException(e.getMessage());
+			throw e;
 		} catch (Exception e) {
 			throw new InvalidStatementException("It was not possible to parse CREATE statement and extract fields definition.");
 		}
