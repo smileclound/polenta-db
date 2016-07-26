@@ -1,6 +1,7 @@
 package com.polenta.db.sorting;
 
 import java.util.List;
+import java.util.Map;
 
 import com.polenta.db.exception.PolentaException;
 import com.polenta.db.sorting.impl.BottomUpMergeSorter;
@@ -12,7 +13,7 @@ import com.polenta.db.sorting.impl.TopDownMergeSorter;
 
 public class SortingExecutor {
 
-	public static List sort(List unsorted, List<String> criterias) throws PolentaException {
+	public static List<Map<String, Object>> sort(List<Map<String, Object>> unsorted, List<String> criterias) throws PolentaException {
 		if (criterias == null || criterias.isEmpty()) {
 			throw new PolentaException("ORDER BY requires fields.");
 		}
@@ -22,13 +23,13 @@ public class SortingExecutor {
 		Sorter sorter = buildSorter(unsorted);
 		
 		if (sorter != null) {
-			return sorter.sort(unsorted);
+			return sorter.sort(unsorted, criterias);
 		} else {
 			throw new PolentaException("ORDER BY clausule could not be executed. No sorter found.");
 		}
 	}
 	
-	private static Sorter buildSorter(List unsorted) {
+	private static Sorter buildSorter(List<Map<String, Object>> unsorted) {
 		int size = unsorted.size();
 		if (size <= 10) {
 			return new SelectionSorter();
