@@ -50,22 +50,34 @@ public class SelectCommand implements Command {
 	}
 	
 	protected String extractObjectName() throws PolentaException {
-		if (statement.indexOf("FROM") == -1) {
-			return null;
-		} else if ((statement.indexOf("WHERE") == -1) && (statement.indexOf("ORDER BY") == -1)) {
-			return statement.substring(statement.indexOf("FROM") + 5).trim();
-		} else if ((statement.indexOf("WHERE") > 0) && (statement.indexOf("ORDER BY") == -1)) {
-			return statement.substring(statement.indexOf("FROM") + 5, statement.indexOf("WHERE")).trim();
-		} else if ((statement.indexOf("WHERE") == -1) && (statement.indexOf("ORDER BY") > 0)) {
-			return statement.substring(statement.indexOf("FROM") + 5, statement.indexOf("ORDER BY")).trim();
-		} else if ((statement.indexOf("WHERE") > 0) && (statement.indexOf("ORDER BY") > 0)) {
-			return statement.substring(statement.indexOf("FROM") + 5, statement.indexOf("WHERE")).trim();
+		try {
+			if (statement.indexOf("FROM") == -1) {
+				return null;
+			} else if ((statement.indexOf("WHERE") == -1) && (statement.indexOf("ORDER BY") == -1)) {
+				return statement.substring(statement.indexOf("FROM") + 5).trim();
+			} else if ((statement.indexOf("WHERE") > 0) && (statement.indexOf("ORDER BY") == -1)) {
+				return statement.substring(statement.indexOf("FROM") + 5, statement.indexOf("WHERE")).trim();
+			} else if ((statement.indexOf("WHERE") == -1) && (statement.indexOf("ORDER BY") > 0)) {
+				return statement.substring(statement.indexOf("FROM") + 5, statement.indexOf("ORDER BY")).trim();
+			} else if ((statement.indexOf("WHERE") > 0) && (statement.indexOf("ORDER BY") > 0)) {
+				return statement.substring(statement.indexOf("FROM") + 5, statement.indexOf("WHERE")).trim();
+			}
+		} catch (Exception e) {
+			throw new PolentaException("Polenta couldn't parse SELECT and extract object name.");
 		}
 		return null;
 	}
 
 	protected List<String> extractSelectFields() throws PolentaException {
 		List<String> fields = new ArrayList<String>();
+		try {
+			String selectFields = statement.trim().substring(statement.indexOf("SELECT") + 6, statement.indexOf("FROM"));
+			for (String field: selectFields.split(",")) {
+				fields.add(field.trim());
+			}
+		} catch (Exception e) {
+			throw new PolentaException("Polent couldn't parse SELECT and extract selected fields.");
+		}
 		return fields;
 	}
 
