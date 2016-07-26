@@ -23,6 +23,9 @@ public class SelectCommand implements Command {
 
 	public String execute() throws PolentaException {
 		String objectName = extractObjectName();
+		if (objectName == null) {
+			throw new InvalidStatementException("SELECT statement must have a FROM clausule");
+		}
 		
 		CatalogItem catalogItem = Catalog.getInstance().get(objectName);  
 
@@ -47,12 +50,18 @@ public class SelectCommand implements Command {
 	}
 	
 	protected String extractObjectName() throws PolentaException {
-		String name = null;
-		if (statement.indexOf(" FROM ") == -1) {
-			throw new InvalidStatementException("SELECT statement must have a FROM clausule");
+		if (statement.indexOf("FROM") == -1) {
+			return null;
+		} else if ((statement.indexOf("WHERE") == -1) && (statement.indexOf("ORDER BY") == -1)) {
+			return statement.substring(statement.indexOf("FROM") + 5).trim();
+		} else if ((statement.indexOf("WHERE") > 0) && (statement.indexOf("ORDER BY") == -1)) {
+			return statement.substring(statement.indexOf("FROM") + 5, statement.indexOf("WHERE")).trim();
+		} else if ((statement.indexOf("WHERE") == -1) && (statement.indexOf("ORDER BY") > 0)) {
+			return statement.substring(statement.indexOf("FROM") + 5, statement.indexOf("ORDER BY")).trim();
+		} else if ((statement.indexOf("WHERE") > 0) && (statement.indexOf("ORDER BY") > 0)) {
+			return statement.substring(statement.indexOf("FROM") + 5, statement.indexOf("WHERE")).trim();
 		}
-		
-		return name;
+		return null;
 	}
 
 	protected List<String> extractSelectFields() throws PolentaException {

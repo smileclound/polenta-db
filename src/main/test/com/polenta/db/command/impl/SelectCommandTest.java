@@ -10,6 +10,14 @@ import com.polenta.db.exception.PolentaException;
 public class SelectCommandTest {
 
 	@Test
+	public void testExtractNullObjectName() throws PolentaException {
+		SelectCommand command = new SelectCommand();
+		command.setStatement("SELECT NAME");
+		String name = command.extractObjectName();
+		assertEquals(null, name);
+	}
+
+	@Test
 	public void testExtractObjectName() throws PolentaException {
 		SelectCommand command = new SelectCommand();
 		command.setStatement("SELECT NAME FROM MY_BAG");
