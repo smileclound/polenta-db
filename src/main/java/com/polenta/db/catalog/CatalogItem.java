@@ -3,34 +3,33 @@ package com.polenta.db.catalog;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.polenta.db.command.ObjectType;
+
 public class CatalogItem {
 
 	private String name;
-	private Class clazz;
+	private ObjectType type;
 	private Map<String, String> definitions;
 	
-	public CatalogItem(String name, Class clazz) {
+	public CatalogItem(String name, ObjectType type) {
 		this.name = name.toUpperCase();
-		this.clazz = clazz;
+		this.type = type;
 		this.definitions = new LinkedHashMap<String, String>();
 	}
 
-	public CatalogItem(String name, Class clazz, Map<String, String> _definitions) {
+	public CatalogItem(String name, ObjectType type, Map<String, String> _definitions) {
 		this.name = name;
-		this.clazz = clazz;
+		this.type = type;
 		this.definitions = new LinkedHashMap<String, String>();
-		
-		for (String key: _definitions.keySet()) {
-			addDefinitionKey(key, _definitions.get(key));
-		}
+		this.definitions.putAll(_definitions);
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public Class getClazz() {
-		return clazz;
+	public ObjectType getType() {
+		return type;
 	}
 	
 	public void addDefinitionKey(String key, String value) {

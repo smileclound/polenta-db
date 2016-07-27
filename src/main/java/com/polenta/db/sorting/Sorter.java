@@ -2,7 +2,7 @@ package com.polenta.db.sorting;
 
 import java.util.List;
 
-import com.polenta.db.Row;
+import com.polenta.db.data.Row;
 import com.polenta.db.exception.PolentaException;
 
 public abstract class Sorter {

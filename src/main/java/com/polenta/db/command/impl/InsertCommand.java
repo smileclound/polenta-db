@@ -3,13 +3,13 @@ package com.polenta.db.command.impl;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
 import com.polenta.db.command.Command;
+import com.polenta.db.command.ObjectType;
+import com.polenta.db.data.Row;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
 import com.polenta.db.object.type.Bag;
@@ -51,8 +51,7 @@ public class InsertCommand implements Command {
 			throw new InvalidStatementException("Object does not exist.");
 		}
 		
-		//change this
-		if (!Bag.class.isAssignableFrom(catalogItem.getClazz())) {
+		if (!catalogItem.getType().equals(ObjectType.BAG)) {
 			throw new InvalidStatementException("INSERT is not supported by this object type.");	
 		}
 		
@@ -66,20 +65,20 @@ public class InsertCommand implements Command {
 		
 		List<Object> convertedFields = convertFields(fields, values, catalogItem);
 		
-		Map<String, Object> insertValues = new LinkedHashMap<String, Object>();
+		Row insertValues = new Row();
 		
 		for (int i = 0; i <= fields.size() - 1; i++) {
-			insertValues.put(fields.get(i), convertedFields.get(i));
+			insertValues.set(fields.get(i), convertedFields.get(i));
 		}
 		
-		performInsert(objectName, catalogItem.getClazz(), insertValues);
+		performInsert(objectName, catalogItem.getType(), insertValues);
 			
 		return "OK";
 	}
 
-	public void performInsert(String name, Class clazz, Map<String, Object> insertValues) throws PolentaException {
-		if (Bag.class.isAssignableFrom(clazz)) {
-			Bag.get(name).insert(insertValues);
+	public void performInsert(String name, ObjectType type, Row row) throws PolentaException {
+		if (type.equals(ObjectType.BAG)) {
+			Bag.get(name).insert(row);
 		} else {
 			throw new InvalidStatementException("INSERT is not supported by this object type.");
 		}

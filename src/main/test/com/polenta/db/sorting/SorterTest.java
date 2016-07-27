@@ -10,7 +10,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.polenta.db.Row;
+import com.polenta.db.data.Row;
 
 public class SorterTest {
 

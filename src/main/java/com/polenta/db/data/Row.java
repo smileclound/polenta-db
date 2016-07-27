@@ -1,4 +1,4 @@
-package com.polenta.db;
+package com.polenta.db.data;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

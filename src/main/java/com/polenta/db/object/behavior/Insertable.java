@@ -1,9 +1,9 @@
 package com.polenta.db.object.behavior;
 
-import java.util.Map;
+import com.polenta.db.data.Row;
 
 public interface Insertable {
 
-	public void insert(Map<String, Object> insertValues);
+	public void insert(Row row);
 	
 }

@@ -3,12 +3,10 @@ package com.polenta.db.command.impl;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
-import com.polenta.db.Row;
 import com.polenta.db.exception.PolentaException;
 
 public class SelectCommandTest {
@@ -88,28 +86,6 @@ public class SelectCommandTest {
 		List<String> fields = command.extractOrderByFields();
 		assertEquals(1, fields.size());
 		assertEquals("SALARY", fields.get(0));
-	}
-
-	@Test
-	public void testFormatResultSetToTransport() {
-		SelectCommand command = new SelectCommand();
-		
-		Row map1 = new Row();
-		map1.set("NAME", "PEDRO");
-		map1.set("AGE", null);
-		
-		Row map2 = new Row();
-		map2.set("NAME", "TIAGO");
-		map2.set("AGE", new Integer(38));
-		
-		List<Row> rows = new ArrayList<Row>();
-		rows.add(map1);
-		rows.add(map2);
-		
-		String formatted = command.formatResultSetToTransport(rows);
-		
-		assertEquals("|NAME:'PEDRO',AGE:NULL|NAME:'TIAGO',AGE:38|", formatted);
-		
 	}
 	
 }

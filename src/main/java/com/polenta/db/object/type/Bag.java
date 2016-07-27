@@ -5,9 +5,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.polenta.db.Row;
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
+import com.polenta.db.command.ObjectType;
+import com.polenta.db.data.ResultSet;
+import com.polenta.db.data.Row;
 import com.polenta.db.exception.PolentaException;
 import com.polenta.db.object.behavior.Dropable;
 import com.polenta.db.object.behavior.Insertable;
@@ -28,7 +30,7 @@ public class Bag implements Insertable, Selectable, Dropable {
 	}
 	
 	private Bag(String bagName, Map<String, String> fields) throws PolentaException {
-		CatalogItem catalogItem = new CatalogItem(bagName, Bag.class, fields);
+		CatalogItem catalogItem = new CatalogItem(bagName, ObjectType.BAG, fields);
 		Catalog.getInstance().add(catalogItem);
 		this.name = bagName; 
 		rows = new LinkedHashMap<Integer, Row>();
@@ -43,10 +45,10 @@ public class Bag implements Insertable, Selectable, Dropable {
 		BAGS.remove(this.name);
 	}
 
-	public List<Row> select(List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
+	public ResultSet select(List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
 		//missing: validate if fields used on all clausules are valids to this bag
 		
-		List<Row> resultSet = new ArrayList<Row>();
+		ResultSet resultSet = new ResultSet();
 		
 		List<Row> filteredRows = filterRows(this.rows, whereConditions);
 		
@@ -71,8 +73,8 @@ public class Bag implements Insertable, Selectable, Dropable {
 		return filteredRows;
 	}
 
-	public synchronized void insert(Map<String, Object> values) {
-		rows.put(rows.size() + 1, new Row(values));
+	public synchronized void insert(Row row) {
+		rows.put(rows.size() + 1, row);
 	}
 
 	public void create() throws PolentaException {
