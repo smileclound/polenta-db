@@ -1,7 +1,7 @@
 package com.polenta.db.command.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +18,7 @@ public class SelectCommand implements Command {
 	private String statement;
 	
 	public void setStatement(String statement) {
-		this.statement = statement;
+		this.statement = statement.toUpperCase();
 	}
 
 	public String execute() throws PolentaException {
@@ -49,8 +49,8 @@ public class SelectCommand implements Command {
 				throw new InvalidStatementException("Field in ORDER BY clausule needs to be listed on SELECT clausule.");
 			}
 		}
-		Map<String, Object> result = performSelect(objectName, catalogItem.getClazz(), selectFields, whereConditions, orderByFields);
-		return formatResultToTransport(result);
+		List<Map<String, Object>> resultSet = performSelect(objectName, catalogItem.getClazz(), selectFields, whereConditions, orderByFields);
+		return formatResultSetToTransport(resultSet);
 	}
 	
 	protected String extractObjectName() throws PolentaException {
@@ -80,13 +80,13 @@ public class SelectCommand implements Command {
 				fields.add(field.trim());
 			}
 		} catch (Exception e) {
-			throw new PolentaException("Polent couldn't parse SELECT and extract selected fields.");
+			throw new PolentaException("Polenta couldn't parse SELECT and extract selected fields.");
 		}
 		return fields;
 	}
 
 	protected Map<String, Object> extractWhereConditions() throws PolentaException {
-		Map<String, Object> conditions = new HashMap<String, Object>();
+		Map<String, Object> conditions = new LinkedHashMap<String, Object>();
 		return conditions;
 	}
 
@@ -104,12 +104,12 @@ public class SelectCommand implements Command {
 				fields.add(field.trim());
 			}
 		} catch (Exception e) {
-			throw new PolentaException("Polent couldn't parse ORDER BY and extract selected fields.");
+			throw new PolentaException("Polenta couldn't parse ORDER BY and extract selected fields.");
 		}
 		return fields;
 	}
 
-	protected Map<String, Object> performSelect(String name, @SuppressWarnings("rawtypes") Class clazz, List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
+	protected List<Map<String, Object>> performSelect(String name, @SuppressWarnings("rawtypes") Class clazz, List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
 		if (Bag.class.isAssignableFrom(clazz)) {
 			return Bag.get(name).select(selectFields, whereConditions, orderByFields);
 		} else if (User.class.isAssignableFrom(clazz)) {
@@ -119,12 +119,32 @@ public class SelectCommand implements Command {
 		}
 	}
 	
-	protected String formatResultToTransport(Map<String, Object> result) {
-		if (result == null || result.isEmpty()) {
+	protected String formatResultSetToTransport(List<Map<String, Object>> resultSet) {
+		if (resultSet == null || resultSet.isEmpty()) {
 			return "EMPTY_RESULT_SET";
 		} else {
-			//change this
-			return result.toString();
+			StringBuilder formatted = new StringBuilder("|");
+			for (Map<String, Object> row: resultSet) {
+				String formattedRow = "";
+				for (String key: row.keySet()) {
+					Object value = row.get(key);
+					String formattedValue;
+					if (value == null) {
+						formattedValue = "NULL";
+					} else if (value.getClass().isAssignableFrom(String.class)) {
+						formattedValue = "'" + value.toString() + "'";
+					} else {
+						formattedValue = value.toString();
+					}
+					formattedRow += key + ":" + formattedValue + ",";
+				}
+				if (formattedRow.endsWith(",")) {
+					formattedRow = formattedRow.substring(0, formattedRow.length() -1);
+				}
+				formatted.append(formattedRow + "|");
+			}
+			System.out.println(formatted.toString());
+			return formatted.toString();
 		}
 	}
 	

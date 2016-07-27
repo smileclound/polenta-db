@@ -1,6 +1,7 @@
 package com.polenta.db.catalog;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.polenta.db.exception.ObjectAlreadyExistsException;
@@ -20,7 +21,7 @@ public class Catalog {
 		return INSTANCE;
 	}
 	
-	private Map<String, CatalogItem> items = new HashMap<String, CatalogItem>();
+	private Map<String, CatalogItem> items = new LinkedHashMap<String, CatalogItem>();
 	
 	public boolean contains(String objectName) {
 		return items.containsKey(objectName);

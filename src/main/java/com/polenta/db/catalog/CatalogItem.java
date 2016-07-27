@@ -1,6 +1,6 @@
 package com.polenta.db.catalog;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CatalogItem {
@@ -12,13 +12,13 @@ public class CatalogItem {
 	public CatalogItem(String name, Class clazz) {
 		this.name = name.toUpperCase();
 		this.clazz = clazz;
-		this.definitions = new HashMap<String, String>();
+		this.definitions = new LinkedHashMap<String, String>();
 	}
 
 	public CatalogItem(String name, Class clazz, Map<String, String> _definitions) {
 		this.name = name;
 		this.clazz = clazz;
-		this.definitions = new HashMap<String, String>();
+		this.definitions = new LinkedHashMap<String, String>();
 		
 		for (String key: _definitions.keySet()) {
 			addDefinitionKey(key, _definitions.get(key));

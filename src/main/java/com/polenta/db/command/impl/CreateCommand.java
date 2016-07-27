@@ -1,7 +1,7 @@
 package com.polenta.db.command.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +62,7 @@ public class CreateCommand implements Command {
 	}
 	
 	protected Map<String, String> extractObjectDefinitions() throws PolentaException {
-		Map<String, String> definitions = new HashMap<String, String>();
+		Map<String, String> definitions = new LinkedHashMap<String, String>();
 		try {
 			String definitionBlock = this.statement.substring(this.statement.indexOf("(") + 1, this.statement.indexOf(")"));
 			String[] fieldsList = definitionBlock.trim().split(",");

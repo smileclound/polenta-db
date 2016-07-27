@@ -7,7 +7,7 @@ import com.polenta.db.exception.PolentaException;
 
 public abstract class Sorter {
 	
-	public abstract List<Map<String, Object>> sort(List<Map<String, Object>> unsorted, List<String> criterias);
+	public abstract List<Map<String, Object>> sort(List<Map<String, Object>> unsorted, List<String> criterias) throws PolentaException;
 	
 	protected int compare(Map<String, Object> map1, Map<String, Object> map2, List<String> criterias) throws PolentaException {
 		//for now only one field is supported
@@ -50,6 +50,13 @@ public abstract class Sorter {
 			throw new PolentaException("Objects are not comparable.");
 		}
 		
+	}
+	
+	protected void exchange(List<Map<String, Object>> list, int a, int b) {
+		Map<String, Object> mapA = list.get(a);
+		Map<String, Object> mapB = list.get(b);
+		list.set(a, mapB);
+		list.set(b, mapA);
 	}
 	
 }

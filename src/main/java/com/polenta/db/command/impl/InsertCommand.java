@@ -3,7 +3,7 @@ package com.polenta.db.command.impl;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +66,7 @@ public class InsertCommand implements Command {
 		
 		List<Object> convertedFields = convertFields(fields, values, catalogItem);
 		
-		Map<String, Object> insertValues = new HashMap<String, Object>();
+		Map<String, Object> insertValues = new LinkedHashMap<String, Object>();
 		
 		for (int i = 0; i <= fields.size() - 1; i++) {
 			insertValues.put(fields.get(i), convertedFields.get(i));
@@ -130,7 +130,7 @@ public class InsertCommand implements Command {
 			String type = catalogItem.getDefinitionValue(field);
 			
 			if (type.equals("STRING")) {
-				valuesList.add(value);
+				valuesList.add(value.substring(1, value.length() - 1));
 			} else if (type.equals("INTEGER")) {
 				try {
 					Integer convertedValue = Integer.parseInt(value);
