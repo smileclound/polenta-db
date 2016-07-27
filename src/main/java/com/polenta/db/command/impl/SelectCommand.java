@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.polenta.db.Row;
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
 import com.polenta.db.command.Command;
@@ -45,11 +46,11 @@ public class SelectCommand implements Command {
 			throw new InvalidStatementException("ORDER BY does not support (yet!) more than a field.");
 		}
 		for (String orderField: orderByFields) {
-			if (!selectFields.contains(orderField)) {
+			if (!selectFields.contains(orderField.split(" ")[0])) {
 				throw new InvalidStatementException("Field in ORDER BY clausule needs to be listed on SELECT clausule.");
 			}
 		}
-		List<Map<String, Object>> resultSet = performSelect(objectName, catalogItem.getClazz(), selectFields, whereConditions, orderByFields);
+		List<Row> resultSet = performSelect(objectName, catalogItem.getClazz(), selectFields, whereConditions, orderByFields);
 		return formatResultSetToTransport(resultSet);
 	}
 	
@@ -109,7 +110,7 @@ public class SelectCommand implements Command {
 		return fields;
 	}
 
-	protected List<Map<String, Object>> performSelect(String name, @SuppressWarnings("rawtypes") Class clazz, List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
+	protected List<Row> performSelect(String name, @SuppressWarnings("rawtypes") Class clazz, List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
 		if (Bag.class.isAssignableFrom(clazz)) {
 			return Bag.get(name).select(selectFields, whereConditions, orderByFields);
 		} else if (User.class.isAssignableFrom(clazz)) {
@@ -119,14 +120,14 @@ public class SelectCommand implements Command {
 		}
 	}
 	
-	protected String formatResultSetToTransport(List<Map<String, Object>> resultSet) {
+	protected String formatResultSetToTransport(List<Row> resultSet) {
 		if (resultSet == null || resultSet.isEmpty()) {
 			return "EMPTY_RESULT_SET";
 		} else {
 			StringBuilder formatted = new StringBuilder("|");
-			for (Map<String, Object> row: resultSet) {
+			for (Row row: resultSet) {
 				String formattedRow = "";
-				for (String key: row.keySet()) {
+				for (String key: row.columnsSet()) {
 					Object value = row.get(key);
 					String formattedValue;
 					if (value == null) {

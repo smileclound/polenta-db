@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.polenta.db.Row;
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
 import com.polenta.db.exception.PolentaException;
@@ -16,7 +17,7 @@ import com.polenta.db.sorting.SortingExecutor;
 public class Bag implements Insertable, Selectable, Dropable {
 	
 	private String name;
-	private Map<Integer, Map<String, Object>> rows;
+	private Map<Integer, Row> rows;
 	
 	private static Map<String, Bag> BAGS = new LinkedHashMap<String, Bag>();
 
@@ -30,7 +31,7 @@ public class Bag implements Insertable, Selectable, Dropable {
 		CatalogItem catalogItem = new CatalogItem(bagName, Bag.class, fields);
 		Catalog.getInstance().add(catalogItem);
 		this.name = bagName; 
-		rows = new LinkedHashMap<Integer, Map<String, Object>>();
+		rows = new LinkedHashMap<Integer, Row>();
 	}
 	
 	public static Bag get(String bagName) {
@@ -42,18 +43,17 @@ public class Bag implements Insertable, Selectable, Dropable {
 		BAGS.remove(this.name);
 	}
 
-	public List<Map<String, Object>> select(List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
+	public List<Row> select(List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
 		//missing: validate if fields used on all clausules are valids to this bag
 		
-		List<Map<String, Object>> resultSet = new ArrayList<Map<String,Object>>();
+		List<Row> resultSet = new ArrayList<Row>();
 		
-		Map<Integer, Map<String, Object>> filteredRows = filterRows(this.rows, whereConditions);
+		List<Row> filteredRows = filterRows(this.rows, whereConditions);
 		
-		for (Integer primaryKey: filteredRows.keySet()) {
-			Map<String, Object> row = filteredRows.get(primaryKey);
-			Map<String, Object> resultRow = new LinkedHashMap<String, Object>();
+		for (Row row: filteredRows) {
+			Row resultRow = new Row();
 			for (String field: selectFields) {
-				resultRow.put(field, row.get(field));
+				resultRow.set(field, row.get(field));
 			}
 			resultSet.add(resultRow);
 		}
@@ -65,12 +65,14 @@ public class Bag implements Insertable, Selectable, Dropable {
 		return resultSet;
 	}
 	
-	protected Map<Integer, Map<String, Object>> filterRows(Map<Integer, Map<String, Object>> allRows, Map<String, Object> whereConditions) {
-		return allRows;
+	protected List<Row> filterRows(Map<Integer, Row> allRows, Map<String, Object> whereConditions) {
+		List<Row> filteredRows = new ArrayList<Row>();
+		filteredRows.addAll(allRows.values());
+		return filteredRows;
 	}
 
-	public void insert(Map<String, Object> values) {
-		rows.put(rows.size() + 1, values);
+	public synchronized void insert(Map<String, Object> values) {
+		rows.put(rows.size() + 1, new Row(values));
 	}
 
 	public void create() throws PolentaException {

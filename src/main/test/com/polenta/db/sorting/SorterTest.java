@@ -10,11 +10,13 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.polenta.db.Row;
+
 public class SorterTest {
 
 	class GenericSorter extends Sorter {
 		@Override
-		public List<Map<String, Object>> sort(List<Map<String, Object>> unsorted, List<String> criterias) {
+		public List<Row> sort(List<Row> unsorted, List<String> criterias) {
 			return null;
 		}
 	}
@@ -23,8 +25,8 @@ public class SorterTest {
 	public void testCompareEmptyMapsAsc() throws Exception {
 		GenericSorter sorter = new GenericSorter();
 		
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		Map<String, Object> map2 = new HashMap<String, Object>();
+		Row map1 = new Row();
+		Row map2 = new Row();
 		
 		List<String> criterias = new ArrayList<String>();
 		criterias.add("NAME");
@@ -37,8 +39,8 @@ public class SorterTest {
 	public void testCompareEmptyMapsDesc() throws Exception {
 		GenericSorter sorter = new GenericSorter();
 		
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		Map<String, Object> map2 = new HashMap<String, Object>();
+		Row map1 = new Row();
+		Row map2 = new Row();
 		
 		List<String> criterias = new ArrayList<String>();
 		criterias.add("NAME DESC");
@@ -51,11 +53,11 @@ public class SorterTest {
 	public void testCompareAscBothMapsHasNullName() throws Exception {
 		GenericSorter sorter = new GenericSorter();
 		
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		map1.put("NAME", null);
+		Row map1 = new Row();
+		map1.set("NAME", null);
 		
-		Map<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("NAME", null);
+		Row map2 = new Row();
+		map2.set("NAME", null);
 		
 		List<String> criterias = new ArrayList<String>();
 		criterias.add("NAME");
@@ -68,11 +70,11 @@ public class SorterTest {
 	public void testCompareDescBothMapsNullName() throws Exception {
 		GenericSorter sorter = new GenericSorter();
 		
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		map1.put("NAME", null);
+		Row map1 = new Row();
+		map1.set("NAME", null);
 
-		Map<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("NAME", null);
+		Row map2 = new Row();
+		map2.set("NAME", null);
 
 		List<String> criterias = new ArrayList<String>();
 		criterias.add("NAME DESC");
@@ -85,11 +87,11 @@ public class SorterTest {
 	public void testCompareAscMap1HasNullName() throws Exception {
 		GenericSorter sorter = new GenericSorter();
 		
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		map1.put("NAME", null);
+		Row map1 = new Row();
+		map1.set("NAME", null);
 
-		Map<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("NAME", "A");
+		Row map2 = new Row();
+		map2.set("NAME", "A");
 		
 		List<String> criterias = new ArrayList<String>();
 		criterias.add("NAME");
@@ -102,11 +104,11 @@ public class SorterTest {
 	public void testCompareDescMap1HasNullName() throws Exception {
 		GenericSorter sorter = new GenericSorter();
 		
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		map1.put("NAME", null);
+		Row map1 = new Row();
+		map1.set("NAME", null);
 
-		Map<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("NAME", "A");
+		Row map2 = new Row();
+		map2.set("NAME", "A");
 		
 		List<String> criterias = new ArrayList<String>();
 		criterias.add("NAME DESC");
@@ -119,11 +121,11 @@ public class SorterTest {
 	public void testCompareAscMap2HasNullName() throws Exception {
 		GenericSorter sorter = new GenericSorter();
 		
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		map1.put("NAME", "A");
+		Row map1 = new Row();
+		map1.set("NAME", "A");
 
-		Map<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("NAME", null);
+		Row map2 = new Row();
+		map2.set("NAME", null);
 
 		List<String> criterias = new ArrayList<String>();
 		criterias.add("NAME");
@@ -136,11 +138,11 @@ public class SorterTest {
 	public void testCompareDescMap2HasNullName() throws Exception {
 		GenericSorter sorter = new GenericSorter();
 		
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		map1.put("NAME", "A");
+		Row map1 = new Row();
+		map1.set("NAME", "A");
 
-		Map<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("NAME", null);
+		Row map2 = new Row();
+		map2.set("NAME", null);
 
 		List<String> criterias = new ArrayList<String>();
 		criterias.add("NAME DESC");
@@ -153,11 +155,11 @@ public class SorterTest {
 	public void testCompareAtoZAsc() throws Exception {
 		GenericSorter sorter = new GenericSorter();
 		
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		map1.put("NAME", "A");
+		Row map1 = new Row();
+		map1.set("NAME", "A");
 
-		Map<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("NAME", "Z");
+		Row map2 = new Row();
+		map2.set("NAME", "Z");
 
 		List<String> criterias = new ArrayList<String>();
 		criterias.add("NAME");
@@ -170,11 +172,11 @@ public class SorterTest {
 	public void testCompareAtoZDesx() throws Exception {
 		GenericSorter sorter = new GenericSorter();
 		
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		map1.put("NAME", "A");
+		Row map1 = new Row();
+		map1.set("NAME", "A");
 
-		Map<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("NAME", "Z");
+		Row map2 = new Row();
+		map2.set("NAME", "Z");
 
 		List<String> criterias = new ArrayList<String>();
 		criterias.add("NAME DESC");
@@ -187,11 +189,11 @@ public class SorterTest {
 	public void testCompareZtoAAsc() throws Exception {
 		GenericSorter sorter = new GenericSorter();
 		
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		map1.put("NAME", "Z");
+		Row map1 = new Row();
+		map1.set("NAME", "Z");
 
-		Map<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("NAME", "A");
+		Row map2 = new Row();
+		map2.set("NAME", "A");
 
 		List<String> criterias = new ArrayList<String>();
 		criterias.add("NAME");
@@ -204,11 +206,11 @@ public class SorterTest {
 	public void testCompareZtoADesx() throws Exception {
 		GenericSorter sorter = new GenericSorter();
 		
-		Map<String, Object> map1 = new HashMap<String, Object>();
-		map1.put("NAME", "Z");
+		Row map1 = new Row();
+		map1.set("NAME", "Z");
 
-		Map<String, Object> map2 = new HashMap<String, Object>();
-		map2.put("NAME", "A");
+		Row map2 = new Row();
+		map2.set("NAME", "A");
 
 		List<String> criterias = new ArrayList<String>();
 		criterias.add("NAME DESC");

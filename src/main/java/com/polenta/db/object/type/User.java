@@ -3,6 +3,7 @@ package com.polenta.db.object.type;
 import java.util.List;
 import java.util.Map;
 
+import com.polenta.db.Row;
 import com.polenta.db.object.behavior.Deletable;
 import com.polenta.db.object.behavior.Selectable;
 import com.polenta.db.object.behavior.Updatable;
@@ -28,7 +29,7 @@ public class User implements Updatable, Selectable, Deletable {
 		
 	}
 
-	public List<Map<String, Object>> select(List<String> selectFields, Map<String, Object> whereConditions, List<String> orderFields) {
+	public List<Row> select(List<String> selectFields, Map<String, Object> whereConditions, List<String> orderFields) {
 		// TODO Auto-generated method stub
 		return null;
 	}

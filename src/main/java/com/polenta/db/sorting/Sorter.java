@@ -1,15 +1,15 @@
 package com.polenta.db.sorting;
 
 import java.util.List;
-import java.util.Map;
 
+import com.polenta.db.Row;
 import com.polenta.db.exception.PolentaException;
 
 public abstract class Sorter {
 	
-	public abstract List<Map<String, Object>> sort(List<Map<String, Object>> unsorted, List<String> criterias) throws PolentaException;
+	public abstract List<Row> sort(List<Row> unsorted, List<String> criterias) throws PolentaException;
 	
-	protected int compare(Map<String, Object> map1, Map<String, Object> map2, List<String> criterias) throws PolentaException {
+	protected int compare(Row map1, Row map2, List<String> criterias) throws PolentaException {
 		//for now only one field is supported
 		String criteria = criterias.get(0);
 		String field = criteria.split(" ")[0];
@@ -52,9 +52,9 @@ public abstract class Sorter {
 		
 	}
 	
-	protected void exchange(List<Map<String, Object>> list, int a, int b) {
-		Map<String, Object> mapA = list.get(a);
-		Map<String, Object> mapB = list.get(b);
+	protected void exchange(List<Row> list, int a, int b) {
+		Row mapA = list.get(a);
+		Row mapB = list.get(b);
 		list.set(a, mapB);
 		list.set(b, mapA);
 	}

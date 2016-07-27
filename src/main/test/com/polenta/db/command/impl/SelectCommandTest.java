@@ -4,12 +4,11 @@ package com.polenta.db.command.impl;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 
+import com.polenta.db.Row;
 import com.polenta.db.exception.PolentaException;
 
 public class SelectCommandTest {
@@ -95,15 +94,15 @@ public class SelectCommandTest {
 	public void testFormatResultSetToTransport() {
 		SelectCommand command = new SelectCommand();
 		
-		Map<String, Object> map1 = new LinkedHashMap<String, Object>();
-		map1.put("NAME", "PEDRO");
-		map1.put("AGE", null);
+		Row map1 = new Row();
+		map1.set("NAME", "PEDRO");
+		map1.set("AGE", null);
 		
-		Map<String, Object> map2 = new LinkedHashMap<String, Object>();
-		map2.put("NAME", "TIAGO");
-		map2.put("AGE", new Integer(38));
+		Row map2 = new Row();
+		map2.set("NAME", "TIAGO");
+		map2.set("AGE", new Integer(38));
 		
-		List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+		List<Row> rows = new ArrayList<Row>();
 		rows.add(map1);
 		rows.add(map2);
 		
