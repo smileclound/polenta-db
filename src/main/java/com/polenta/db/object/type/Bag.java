@@ -8,6 +8,7 @@ import java.util.Map;
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
 import com.polenta.db.command.ObjectType;
+import com.polenta.db.data.DataType;
 import com.polenta.db.data.ResultSet;
 import com.polenta.db.data.Row;
 import com.polenta.db.exception.PolentaException;
@@ -23,13 +24,13 @@ public class Bag implements Insertable, Selectable, Dropable {
 	
 	private static Map<String, Bag> BAGS = new LinkedHashMap<String, Bag>();
 
-	public static void create(String bagName, Map<String, String> fields) throws PolentaException {
+	public static void create(String bagName, Map<String, DataType> fields) throws PolentaException {
 		Bag bag = new Bag(bagName, fields);
 		BAGS.put(bagName, bag);
 		System.out.println("New bag " + bagName + " created");
 	}
 	
-	private Bag(String bagName, Map<String, String> fields) throws PolentaException {
+	private Bag(String bagName, Map<String, DataType> fields) throws PolentaException {
 		CatalogItem catalogItem = new CatalogItem(bagName, ObjectType.BAG, fields);
 		Catalog.getInstance().add(catalogItem);
 		this.name = bagName; 

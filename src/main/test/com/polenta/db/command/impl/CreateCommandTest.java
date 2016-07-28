@@ -8,6 +8,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.polenta.db.command.impl.CreateCommand;
+import com.polenta.db.data.DataType;
 
 public class CreateCommandTest {
 
@@ -16,7 +17,7 @@ public class CreateCommandTest {
 		CreateCommand command = new CreateCommand();
 		command.setStatement("CREATE BAG (NAME STRING, BIRTH DATE, ZIP INTEGER, SALARY DOUBLE)");
 		
-		Map<String, String> map = command.extractObjectDefinitions();
+		Map<String, DataType> map = command.extractObjectDefinitions();
 		
 		assertEquals(4, map.size());
 		
@@ -25,10 +26,10 @@ public class CreateCommandTest {
 		assertTrue(map.containsKey("ZIP"));
 		assertTrue(map.containsKey("SALARY"));
 		
-		assertEquals("STRING", map.get("NAME"));
-		assertEquals("DATE", map.get("BIRTH"));
-		assertEquals("INTEGER", map.get("ZIP"));
-		assertEquals("DOUBLE", map.get("SALARY"));
+		assertEquals(DataType.STRING, map.get("NAME"));
+		assertEquals(DataType.DATE, map.get("BIRTH"));
+		assertEquals(DataType.INTEGER, map.get("ZIP"));
+		assertEquals(DataType.DOUBLE, map.get("SALARY"));
 	}
 	
 }

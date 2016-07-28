@@ -1,29 +1,18 @@
 package com.polenta.db.command.impl;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.polenta.db.catalog.Catalog;
 import com.polenta.db.command.Command;
+import com.polenta.db.command.ObjectType;
+import com.polenta.db.data.DataType;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
 import com.polenta.db.object.type.Bag;
-import com.polenta.db.object.type.User;
 
 public class CreateCommand implements Command {
 
 	private String statement;
-	
-	private static List<String> SUPPORTED_FIELD_TYPES = new ArrayList<String>();
-	
-	static {
-		SUPPORTED_FIELD_TYPES.add("STRING");
-		SUPPORTED_FIELD_TYPES.add("INTEGER");
-		SUPPORTED_FIELD_TYPES.add("DATE");
-		SUPPORTED_FIELD_TYPES.add("DOUBLE");
-	}
 	
 	public void setStatement(String statement) {
 		this.statement = statement;
@@ -46,23 +35,24 @@ public class CreateCommand implements Command {
 		if (objectName.contains("(") || objectName.contains(")") || objectName.contains(",")) {
 			throw new InvalidStatementException("Object name must be defined on CREATE statement.");
 		}
-		Map<String, String> objectDefinitions = extractObjectDefinitions();
-		if (objectDefinitions == null && objectDefinitions.isEmpty()) {
+		Map<String, DataType> objectDefinitions = extractObjectDefinitions();
+		if (objectDefinitions == null || objectDefinitions.isEmpty()) {
 			throw new InvalidStatementException("Fields must be defined on CREATE statement.");
 		}
 		
-		Class clazz = Catalog.retrieveObjectTypeClass(objectType);
-		if (clazz == null) {
+		ObjectType type = ObjectType.valueOf(objectType);
+		
+		if (type == null) {
 			throw new InvalidStatementException("Object type is not supported by Polenta.");
 		}
 		
-		performCreate(clazz, objectName.toUpperCase(), objectDefinitions);
+		performCreate(type, objectName.toUpperCase(), objectDefinitions);
 		
 		return "OK";
 	}
 	
-	protected Map<String, String> extractObjectDefinitions() throws PolentaException {
-		Map<String, String> definitions = new LinkedHashMap<String, String>();
+	protected Map<String, DataType> extractObjectDefinitions() throws PolentaException {
+		Map<String, DataType> definitions = new LinkedHashMap<String, DataType>();
 		try {
 			String definitionBlock = this.statement.substring(this.statement.indexOf("(") + 1, this.statement.indexOf(")"));
 			String[] fieldsList = definitionBlock.trim().split(",");
@@ -73,10 +63,11 @@ public class CreateCommand implements Command {
 				}
 				String fieldName = fieldDefinitions[0].toUpperCase();
 				String fieldType = fieldDefinitions[1].toUpperCase();
-				if (!SUPPORTED_FIELD_TYPES.contains(fieldType)) {
+				DataType dataType = DataType.valueOf(fieldType);
+				if (dataType == null) {
 					throw new InvalidStatementException("Filed type for " + fieldName + " is not supported by Polenta.");
 				}
-				definitions.put(fieldName, fieldType);
+				definitions.put(fieldName, dataType);
 			}
 		} catch (InvalidStatementException e) {
 			throw e;
@@ -86,17 +77,14 @@ public class CreateCommand implements Command {
 		return definitions;
 	}
 
-	protected void performCreate(Class clazz, String name, Map<String, String> definitionValues) throws PolentaException {
-		//refactor to avoid if's
-		if (Bag.class.isAssignableFrom(clazz)) {
+	protected void performCreate(ObjectType type, String name, Map<String, DataType> definitionValues) throws PolentaException {
+		if (type == ObjectType.BAG) {
 			Bag.create(name, definitionValues);
-		} else if (User.class.isAssignableFrom(clazz)) {
-			User.create(name, definitionValues);
+		} else if (type == ObjectType.USER) {
+			//User.create(name, definitionValues);
 		} else {
 			throw new InvalidStatementException("CREATE is not supported by this object type.");
 		}
 	}
-	
-	
 
 }

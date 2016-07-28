@@ -4,23 +4,24 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.polenta.db.command.ObjectType;
+import com.polenta.db.data.DataType;
 
 public class CatalogItem {
 
 	private String name;
 	private ObjectType type;
-	private Map<String, String> definitions;
+	private Map<String, DataType> definitions;
 	
 	public CatalogItem(String name, ObjectType type) {
 		this.name = name.toUpperCase();
 		this.type = type;
-		this.definitions = new LinkedHashMap<String, String>();
+		this.definitions = new LinkedHashMap<String, DataType>();
 	}
 
-	public CatalogItem(String name, ObjectType type, Map<String, String> _definitions) {
+	public CatalogItem(String name, ObjectType type, Map<String, DataType> _definitions) {
 		this.name = name;
 		this.type = type;
-		this.definitions = new LinkedHashMap<String, String>();
+		this.definitions = new LinkedHashMap<String, DataType>();
 		this.definitions.putAll(_definitions);
 	}
 
@@ -32,16 +33,16 @@ public class CatalogItem {
 		return type;
 	}
 	
-	public void addDefinitionKey(String key, String value) {
-		definitions.put(key.toUpperCase(), value.toUpperCase());
+	public void addDefinitionKey(String key, DataType value) {
+		definitions.put(key.toUpperCase(), value);
 	}
 	
 	public boolean hasDefinitionKey(String key) {
 		return definitions.containsKey(key.toUpperCase());
 	}
 	
-	public String getDefinitionValue(String key) {
-		return definitions.get(key.toUpperCase());
+	public DataType getDefinitionValue(String key) {
+		return definitions.get(key);
 	}
 	
 }
