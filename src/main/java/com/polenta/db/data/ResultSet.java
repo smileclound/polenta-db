@@ -15,7 +15,6 @@ public class ResultSet extends ArrayList<Row> {
 		super(rows);
 	}
 	
-	
 	public String toString() {
 		if (this.isEmpty()) {
 			return "EMPTY_RESULT_SET";

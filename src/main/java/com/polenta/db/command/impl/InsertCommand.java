@@ -1,14 +1,13 @@
 package com.polenta.db.command.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
 import com.polenta.db.command.Command;
 import com.polenta.db.command.ObjectType;
+import com.polenta.db.data.DataType;
 import com.polenta.db.data.Row;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
@@ -18,7 +17,6 @@ public class InsertCommand implements Command {
 
 	private String statement;
 	
-	private static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public void setStatement(String statement) {
 		this.statement = statement;
@@ -126,31 +124,11 @@ public class InsertCommand implements Command {
 		for (int i = 0; i <= fields.size() - 1; i++) {
 			String field = fields.get(i);
 			String value = values.get(i);
-			String type = catalogItem.getDefinitionValue(field);
-			
-			if (type.equals("STRING")) {
-				valuesList.add(value.substring(1, value.length() - 1));
-			} else if (type.equals("INTEGER")) {
-				try {
-					Integer convertedValue = Integer.parseInt(value);
-					valuesList.add(convertedValue);
-				} catch (Exception e) {
-					throw new InvalidStatementException("Value of field " + field + " needs to be INTEGER.");
-				}
-			} else if (type.equals("DOUBLE")) {
-				try {
-					Double convertedValue = Double.parseDouble(value);
-					valuesList.add(convertedValue);
-				} catch (Exception e) {
-					throw new InvalidStatementException("Value of field " + field + " needs to be DOUBLE.");
-				}
-			} else if (type.equals("DATE")) {
-				try {
-					Date convertedValue = DATE_FORMATTER.parse(value);
-					valuesList.add(convertedValue);
-				} catch (Exception e) {
-					throw new InvalidStatementException("Value of field " + field + " needs to be DATE (YYYY-MM-DD).");
-				}
+			DataType type = catalogItem.getDefinitionValue(field);
+			try {
+				valuesList.add(type.convert(value));
+			} catch (Exception e) {
+				throw new InvalidStatementException("Value of field " + field + " needs to be " + type.toString() +  ".");
 			}
 		}
 		
