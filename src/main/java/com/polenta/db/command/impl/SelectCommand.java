@@ -8,11 +8,10 @@ import java.util.Map;
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
 import com.polenta.db.command.Command;
-import com.polenta.db.command.ObjectType;
 import com.polenta.db.data.ResultSet;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
-import com.polenta.db.object.type.Bag;
+import com.polenta.db.object.behavior.Selectable;
 import com.polenta.db.store.Store;
 
 public class SelectCommand implements Command {
@@ -41,17 +40,26 @@ public class SelectCommand implements Command {
 		}
 		
 		Map<String, Object> whereConditions = extractWhereConditions();
-		List<String> orderByFields = extractOrderByFields();
 		
+		List<String> orderByFields = extractOrderByFields();
 		if (orderByFields.size() > 1) {
 			throw new InvalidStatementException("ORDER BY does not support (yet!) more than a field.");
 		}
+		
 		for (String orderField: orderByFields) {
 			if (!selectFields.contains(orderField.split(" ")[0])) {
 				throw new InvalidStatementException("Field in ORDER BY clausule needs to be listed on SELECT clausule.");
 			}
 		}
-		ResultSet resultSet = performSelect(objectName, catalogItem.getType(), selectFields, whereConditions, orderByFields);
+
+		ResultSet resultSet;
+		
+		try {
+			resultSet = ((Selectable)Store.getInstance().get(objectName)).select(selectFields, whereConditions, orderByFields);
+		} catch (ClassCastException e) {
+			throw new InvalidStatementException("INSERT is not supported by this object type.");
+		}
+		
 		return resultSet.toString();
 	}
 	
@@ -111,14 +119,4 @@ public class SelectCommand implements Command {
 		return fields;
 	}
 
-	protected ResultSet performSelect(String name, ObjectType type, List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
-		if (type.equals(ObjectType.BAG)) {
-			return ((Bag)Store.getInstance().get(name)).select(selectFields, whereConditions, orderByFields);
-		} else if (type.equals(ObjectType.USER)) {
-			return null; //User.getInstance().select(selectFields, whereConditions, orderFields);
-		} else {
-			throw new InvalidStatementException("SELECT is not supported by this object type.");
-		}
-	}
-	
 }

@@ -6,12 +6,11 @@ import java.util.List;
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
 import com.polenta.db.command.Command;
-import com.polenta.db.command.ObjectType;
 import com.polenta.db.data.DataType;
 import com.polenta.db.data.Row;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
-import com.polenta.db.object.type.Bag;
+import com.polenta.db.object.behavior.Insertable;
 import com.polenta.db.store.Store;
 
 public class InsertCommand implements Command {
@@ -50,10 +49,6 @@ public class InsertCommand implements Command {
 			throw new InvalidStatementException("Object does not exist.");
 		}
 		
-		if (!catalogItem.getType().equals(ObjectType.BAG)) {
-			throw new InvalidStatementException("INSERT is not supported by this object type.");	
-		}
-		
 		List<String> fields = extractFieldNames();
 		List<String> values = extractRawFieldValues();
 		if (fields.size() != values.size()) {
@@ -64,25 +59,21 @@ public class InsertCommand implements Command {
 		
 		List<Object> convertedFields = convertFields(fields, values, catalogItem);
 		
-		Row insertValues = new Row();
+		Row newRow = new Row();
 		
 		for (int i = 0; i <= fields.size() - 1; i++) {
-			insertValues.set(fields.get(i), convertedFields.get(i));
+			newRow.set(fields.get(i), convertedFields.get(i));
 		}
 		
-		performInsert(objectName, catalogItem.getType(), insertValues);
-			
+		try {
+			((Insertable)Store.getInstance().get(objectName)).insert(newRow);
+		} catch (ClassCastException e) {
+			throw new InvalidStatementException("INSERT is not supported by this object type.");
+		}
+		
 		return "OK";
 	}
 
-	public void performInsert(String name, ObjectType type, Row row) throws PolentaException {
-		if (type.equals(ObjectType.BAG)) {
-			((Bag)Store.getInstance().get(name)).insert(row);
-		} else {
-			throw new InvalidStatementException("INSERT is not supported by this object type.");
-		}
-	}
-	
 	public List<String> extractFieldNames() throws PolentaException {
 		List<String> fieldsList = new ArrayList<String>();
 		try {

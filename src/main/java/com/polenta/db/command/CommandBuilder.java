@@ -6,7 +6,7 @@ import com.polenta.db.command.impl.DeleteCommand;
 import com.polenta.db.command.impl.DropCommand;
 import com.polenta.db.command.impl.InsertCommand;
 import com.polenta.db.command.impl.SelectCommand;
-import com.polenta.db.command.impl.ShutdownCommand;
+import com.polenta.db.command.impl.DBACommand;
 import com.polenta.db.command.impl.UpdateCommand;
 
 public class CommandBuilder {
@@ -37,7 +37,7 @@ public class CommandBuilder {
 		} else if (operation.equalsIgnoreCase("SELECT")) {
 			command = new SelectCommand();
 		} else if (operation.equalsIgnoreCase("SHUTDOWN")) {
-			command = new ShutdownCommand();
+			command = new DBACommand();
 		} else if (operation.equalsIgnoreCase("UPDATE")) {
 			command = new UpdateCommand();
 		} else {

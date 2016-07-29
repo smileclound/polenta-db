@@ -43,8 +43,8 @@ public abstract class Sorter {
 			throw new PolentaException("Objects of different types cannot be compared.");
 		}
 		try {
-			Comparable comparable1 = (Comparable)object1;
-			Comparable comparable2 = (Comparable)object2;
+			Comparable<Object> comparable1 = (Comparable<Object>)object1;
+			Comparable<Object> comparable2 = (Comparable<Object>)object2;
 			return comparable1.compareTo(comparable2);
 		} catch (Exception e) {
 			throw new PolentaException("Objects are not comparable.");

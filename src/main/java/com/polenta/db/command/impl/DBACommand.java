@@ -2,8 +2,9 @@ package com.polenta.db.command.impl;
 
 import com.polenta.db.command.Command;
 
-public class ShutdownCommand implements Command {
+public class DBACommand implements Command {
 
+	@SuppressWarnings("unused")
 	private String statement;
 	
 	public void setStatement(String statement) {
@@ -11,8 +12,7 @@ public class ShutdownCommand implements Command {
 	}
 
 	public String execute() {
-		// TODO Auto-generated method stub
-		return null;
+		return "OK";
 	}
 
 }
