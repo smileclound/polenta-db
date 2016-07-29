@@ -7,9 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 
-import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
 
 public class SocketProcessor implements Runnable {
@@ -20,7 +18,6 @@ public class SocketProcessor implements Runnable {
 	public SocketProcessor(InputStream statementInputStream, OutputStream statementOutputStream) {
 		reader = new BufferedReader(new InputStreamReader(statementInputStream));
 		writer = new BufferedWriter(new OutputStreamWriter(statementOutputStream));
-
 	}
 
 	public void run() {

@@ -35,5 +35,9 @@ public class Catalog {
 	public CatalogItem get(String name) {
 		return items.get(name);
 	}
+
+	public void remove(String name) {
+		items.remove(name);
+	}
 	
 }

@@ -3,9 +3,9 @@ package com.polenta.db.command.impl;
 import java.util.Map;
 
 import com.polenta.db.command.Command;
+import com.polenta.db.command.ObjectType;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
-import com.polenta.db.object.type.User;
 
 public class DeleteCommand implements Command {
 
@@ -16,14 +16,13 @@ public class DeleteCommand implements Command {
 	}
 
 	public String execute() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	
-	public static void performDelete(Class clazz, Map<String, Object> filterValues) throws PolentaException {
-		if (User.class.isAssignableFrom(clazz)) {
-			User.getInstance().delete(filterValues);
+	public static void performDelete(ObjectType type, Map<String, Object> filterValues) throws PolentaException {
+		if (type == ObjectType.TABLE) {
+			//Table.getInstance().delete(filterValues);
 		} else {
 			throw new InvalidStatementException("DELETE is not supported by this object type.");
 		}

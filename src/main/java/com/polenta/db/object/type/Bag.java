@@ -5,47 +5,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.polenta.db.catalog.Catalog;
-import com.polenta.db.catalog.CatalogItem;
-import com.polenta.db.command.ObjectType;
-import com.polenta.db.data.DataType;
 import com.polenta.db.data.ResultSet;
 import com.polenta.db.data.Row;
 import com.polenta.db.exception.PolentaException;
-import com.polenta.db.object.behavior.Dropable;
 import com.polenta.db.object.behavior.Insertable;
 import com.polenta.db.object.behavior.Selectable;
 import com.polenta.db.sorting.SortingExecutor;
+import com.polenta.db.store.Storable;
 
-public class Bag implements Insertable, Selectable, Dropable {
+public class Bag implements Insertable, Selectable, Storable {
 	
-	private String name;
-	private Map<Integer, Row> rows;
+	private Map<Integer, Row> rows = new LinkedHashMap<Integer, Row>();
 	
-	private static Map<String, Bag> BAGS = new LinkedHashMap<String, Bag>();
-
-	public static void create(String bagName, Map<String, DataType> fields) throws PolentaException {
-		Bag bag = new Bag(bagName, fields);
-		BAGS.put(bagName, bag);
-		System.out.println("New bag " + bagName + " created");
-	}
-	
-	private Bag(String bagName, Map<String, DataType> fields) throws PolentaException {
-		CatalogItem catalogItem = new CatalogItem(bagName, ObjectType.BAG, fields);
-		Catalog.getInstance().add(catalogItem);
-		this.name = bagName; 
-		rows = new LinkedHashMap<Integer, Row>();
-	}
-	
-	public static Bag get(String bagName) {
-		return BAGS.get(bagName);
-	}
-
-	public void drop() {
-		this.rows.clear();
-		BAGS.remove(this.name);
-	}
-
 	public ResultSet select(List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
 		//missing: validate if fields used on all clausules are valids to this bag
 		
@@ -77,9 +48,5 @@ public class Bag implements Insertable, Selectable, Dropable {
 	public synchronized void insert(Row row) {
 		rows.put(rows.size() + 1, row);
 	}
-
-	public void create() throws PolentaException {
-	}
-
 
 }

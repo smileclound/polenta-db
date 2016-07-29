@@ -12,6 +12,7 @@ import com.polenta.db.data.Row;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
 import com.polenta.db.object.type.Bag;
+import com.polenta.db.store.Store;
 
 public class InsertCommand implements Command {
 
@@ -76,7 +77,7 @@ public class InsertCommand implements Command {
 
 	public void performInsert(String name, ObjectType type, Row row) throws PolentaException {
 		if (type.equals(ObjectType.BAG)) {
-			Bag.get(name).insert(row);
+			((Bag)Store.getInstance().get(name)).insert(row);
 		} else {
 			throw new InvalidStatementException("INSERT is not supported by this object type.");
 		}

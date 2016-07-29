@@ -8,7 +8,7 @@ import com.polenta.db.command.ObjectType;
 import com.polenta.db.data.DataType;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
-import com.polenta.db.object.type.Bag;
+import com.polenta.db.store.Store;
 
 public class CreateCommand implements Command {
 
@@ -46,7 +46,7 @@ public class CreateCommand implements Command {
 			throw new InvalidStatementException("Object type is not supported by Polenta.");
 		}
 		
-		performCreate(type, objectName.toUpperCase(), objectDefinitions);
+		Store.getInstance().add(type, objectName.toUpperCase(), objectDefinitions);
 		
 		return "OK";
 	}
@@ -75,16 +75,6 @@ public class CreateCommand implements Command {
 			throw new InvalidStatementException("It was not possible to parse CREATE statement and extract fields definition.");
 		}
 		return definitions;
-	}
-
-	protected void performCreate(ObjectType type, String name, Map<String, DataType> definitionValues) throws PolentaException {
-		if (type == ObjectType.BAG) {
-			Bag.create(name, definitionValues);
-		} else if (type == ObjectType.USER) {
-			//User.create(name, definitionValues);
-		} else {
-			throw new InvalidStatementException("CREATE is not supported by this object type.");
-		}
 	}
 
 }

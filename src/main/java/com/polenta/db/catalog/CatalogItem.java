@@ -18,7 +18,7 @@ public class CatalogItem {
 		this.definitions = new LinkedHashMap<String, DataType>();
 	}
 
-	public CatalogItem(String name, ObjectType type, Map<String, DataType> _definitions) {
+	public CatalogItem(ObjectType type, String name, Map<String, DataType> _definitions) {
 		this.name = name;
 		this.type = type;
 		this.definitions = new LinkedHashMap<String, DataType>();

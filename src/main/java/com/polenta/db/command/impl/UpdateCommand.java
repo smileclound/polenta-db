@@ -3,9 +3,9 @@ package com.polenta.db.command.impl;
 import java.util.Map;
 
 import com.polenta.db.command.Command;
+import com.polenta.db.command.ObjectType;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
-import com.polenta.db.object.type.User;
 
 public class UpdateCommand implements Command {
 
@@ -16,13 +16,14 @@ public class UpdateCommand implements Command {
 	}
 
 	public String execute() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	public static void performUpdate(Class clazz, Map<String, Object> filterValues, Map<String, Object> newValues) throws PolentaException {
-		if (User.class.isAssignableFrom(clazz)) {
-			User.getInstance().update(filterValues, newValues);
+	public static void performUpdate(ObjectType type, Map<String, Object> filterValues, Map<String, Object> newValues) throws PolentaException {
+		if (type == ObjectType.TABLE) {
+			//
+		} else if (type == ObjectType.USER) {
+			//User.getInstance().update(filterValues, newValues);
 		} else {
 			throw new InvalidStatementException("UPDATE is not supported by this object type.");
 		}

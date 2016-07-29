@@ -13,6 +13,7 @@ import com.polenta.db.data.ResultSet;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
 import com.polenta.db.object.type.Bag;
+import com.polenta.db.store.Store;
 
 public class SelectCommand implements Command {
 
@@ -112,7 +113,7 @@ public class SelectCommand implements Command {
 
 	protected ResultSet performSelect(String name, ObjectType type, List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
 		if (type.equals(ObjectType.BAG)) {
-			return Bag.get(name).select(selectFields, whereConditions, orderByFields);
+			return ((Bag)Store.getInstance().get(name)).select(selectFields, whereConditions, orderByFields);
 		} else if (type.equals(ObjectType.USER)) {
 			return null; //User.getInstance().select(selectFields, whereConditions, orderFields);
 		} else {
