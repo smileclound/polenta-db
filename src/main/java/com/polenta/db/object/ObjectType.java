@@ -1,4 +1,4 @@
-package com.polenta.db.command;
+package com.polenta.db.object;
 
 import com.polenta.db.object.type.Bag;
 import com.polenta.db.object.type.Table;

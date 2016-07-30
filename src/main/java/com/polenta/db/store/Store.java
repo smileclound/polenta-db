@@ -5,10 +5,10 @@ import java.util.Map;
 
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
-import com.polenta.db.command.ObjectType;
 import com.polenta.db.data.DataType;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
+import com.polenta.db.object.ObjectType;
 
 public class Store {
 

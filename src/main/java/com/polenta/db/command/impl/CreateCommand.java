@@ -4,10 +4,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.polenta.db.command.Command;
-import com.polenta.db.command.ObjectType;
 import com.polenta.db.data.DataType;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
+import com.polenta.db.object.ObjectType;
 import com.polenta.db.store.Store;
 
 public class CreateCommand implements Command {

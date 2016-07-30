@@ -23,15 +23,6 @@ public class InsertCommand implements Command {
 	}
 
 	public String execute() throws PolentaException {
-		String intoStatement;
-		try {
-			intoStatement = statement.trim().toUpperCase().split(" ")[1];
-		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
-			throw new InvalidStatementException("Invalid syntax for INSERT statement.");
-		}
-		if (!intoStatement.equals("INTO")) {
-			throw new InvalidStatementException("Invalid syntax for INSERT statement.");
-		}
 		String objectName;
 		try {
 			objectName = statement.trim().toUpperCase().split(" ")[2];

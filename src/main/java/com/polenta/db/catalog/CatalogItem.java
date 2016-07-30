@@ -3,8 +3,8 @@ package com.polenta.db.catalog;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.polenta.db.command.ObjectType;
 import com.polenta.db.data.DataType;
+import com.polenta.db.object.ObjectType;
 
 public class CatalogItem {
 

@@ -6,8 +6,10 @@ import com.polenta.db.command.impl.DeleteCommand;
 import com.polenta.db.command.impl.DropCommand;
 import com.polenta.db.command.impl.InsertCommand;
 import com.polenta.db.command.impl.SelectCommand;
-import com.polenta.db.command.impl.DBACommand;
+import com.polenta.db.command.impl.AdminDatabaseCommand;
+import com.polenta.db.command.impl.AdminUserCommand;
 import com.polenta.db.command.impl.UpdateCommand;
+import com.polenta.db.processor.StatementParser;
 
 public class CommandBuilder {
 
@@ -22,23 +24,25 @@ public class CommandBuilder {
 	}
 	
 	public Command build(String statement) {
-		String operation = statement.trim().toUpperCase().split(" ")[0];
+		CommandType commandType = StatementParser.extractCommandType(statement);
 		Command command;
-		if (operation.equalsIgnoreCase("ALTER")) {
+		if (commandType == CommandType.ALTER) {
 			command = new AlterCommand();
-		} else if (operation.equalsIgnoreCase("CREATE")) {
+		} else if (commandType == CommandType.CREATE) {
 			command = new CreateCommand();
-		} else if (operation.equalsIgnoreCase("DELETE")) {
+		} else if (commandType == CommandType.DELETE) {
 			command = new DeleteCommand();
-		} else if (operation.equalsIgnoreCase("DROP")) {
+		} else if (commandType == CommandType.DROP) {
 			command = new DropCommand();
-		} else if (operation.equalsIgnoreCase("INSERT")) {
+		} else if (commandType == CommandType.INSERT) {
 			command = new InsertCommand();
-		} else if (operation.equalsIgnoreCase("SELECT")) {
+		} else if (commandType == CommandType.SELECT) {
 			command = new SelectCommand();
-		} else if (operation.equalsIgnoreCase("SHUTDOWN")) {
-			command = new DBACommand();
-		} else if (operation.equalsIgnoreCase("UPDATE")) {
+		} else if (commandType == CommandType.ADMIN_USER) {
+			command = new AdminUserCommand();
+		} else if (commandType == CommandType.ADMIN_DATABASE) {
+			command = new AdminDatabaseCommand();
+		} else if (commandType == CommandType.UPDATE) {
 			command = new UpdateCommand();
 		} else {
 			return null;

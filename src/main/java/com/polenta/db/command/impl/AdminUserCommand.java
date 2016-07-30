@@ -2,7 +2,7 @@ package com.polenta.db.command.impl;
 
 import com.polenta.db.command.Command;
 
-public class DBACommand implements Command {
+public class AdminUserCommand implements Command {
 
 	@SuppressWarnings("unused")
 	private String statement;
