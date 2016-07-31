@@ -52,7 +52,7 @@ public class SocketProcessor implements Runnable {
 						e.printStackTrace();
 					}
 					System.out.println("Statement executed. Result: " + result);
-					writer.write("OK");
+					writer.write(result);
 					writer.newLine();
 					writer.flush();
 				} else {
