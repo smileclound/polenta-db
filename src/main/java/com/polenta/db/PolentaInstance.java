@@ -31,11 +31,10 @@ public class PolentaInstance {
 		while (true) {
 			try {
 				Socket clientSocket = serverSocket.accept();
-				clientSocket.setKeepAlive(true);
-				SocketProcessor processor = new SocketProcessor(clientSocket.getInputStream(), clientSocket.getOutputStream());
+				SocketProcessor processor = new SocketProcessor(clientSocket);
 				Thread thread = new Thread(processor);
 				thread.start();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
