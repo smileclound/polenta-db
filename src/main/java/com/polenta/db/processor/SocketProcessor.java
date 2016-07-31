@@ -39,7 +39,7 @@ public class SocketProcessor implements Runnable {
 				statement = reader.readLine();
 				if (statement != null) {
 					socketIdleTime = 0;
-					System.out.println("\nStatement received: " + statement + " processor: " + this);
+					System.out.println("\nStatement received: " + statement);
 					StatementProcessor processor = new StatementProcessor(statement.trim());
 					String result;
 					try {
