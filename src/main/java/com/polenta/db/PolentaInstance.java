@@ -16,7 +16,7 @@ public class PolentaInstance {
 
 	ServerSocket serverSocket;
 
-	protected final void start() {
+	public final void start() {
 		System.out.println("Starting Polenta...");
 		System.out.println("Opening port " + this.port + ".");
 		
@@ -31,6 +31,7 @@ public class PolentaInstance {
 		while (true) {
 			try {
 				Socket clientSocket = serverSocket.accept();
+				clientSocket.setKeepAlive(true);
 				SocketProcessor processor = new SocketProcessor(clientSocket.getInputStream(), clientSocket.getOutputStream());
 				Thread thread = new Thread(processor);
 				thread.start();
@@ -41,9 +42,11 @@ public class PolentaInstance {
 		
 	}
 
-	protected final void shutdown() {
+	public final void shutdown() {
 		try {
 			serverSocket.close();
+			System.out.println("Polenta shutdown in progress.");
+			System.exit(0);
 		} catch (IOException e) {
 			System.err.println("Polenta could not friendly close port + " + port + "!");
 		}

@@ -20,7 +20,7 @@ public abstract class Sorter {
 			direction = "ASC";
 		}
 		int compare = compareObjects(map1.get(field), map2.get(field));
-		if (direction.equals("DESC")) {
+		if (direction.equalsIgnoreCase("DESC")) {
 			compare = compare * -1;
 		}
 		return compare;

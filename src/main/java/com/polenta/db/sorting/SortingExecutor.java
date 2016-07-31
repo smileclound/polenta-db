@@ -5,12 +5,9 @@ import java.util.List;
 import com.polenta.db.data.ResultSet;
 import com.polenta.db.data.Row;
 import com.polenta.db.exception.PolentaException;
-import com.polenta.db.sorting.impl.BottomUpMergeSorter;
 import com.polenta.db.sorting.impl.InsertionSorter;
-import com.polenta.db.sorting.impl.QuickSorter;
 import com.polenta.db.sorting.impl.SelectionSorter;
 import com.polenta.db.sorting.impl.ShellSorter;
-import com.polenta.db.sorting.impl.TopDownMergeSorter;
 
 public class SortingExecutor {
 
@@ -39,11 +36,14 @@ public class SortingExecutor {
 		} else if (size <= 100) {
 			return new ShellSorter();
 		} else if (size <= 500) {
-			return new BottomUpMergeSorter();
+			return new ShellSorter();
+			//return new BottomUpMergeSorter();
 		} else if (size <= 1000) {
-			return new TopDownMergeSorter();
+			return new ShellSorter();
+			//return new TopDownMergeSorter();
 		} else {
-			return new QuickSorter();
+			return new ShellSorter();
+			//return new QuickSorter();
 		}
 		
 	}

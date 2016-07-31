@@ -11,7 +11,7 @@ import com.polenta.db.data.Row;
 import com.polenta.db.exception.PolentaException;
 import com.polenta.db.sorting.SorterMocker;
 
-public class InsertionSorterTest extends InsertionSorter {
+public class ShellSorterTest extends ShellSorter {
 	
 	@Test
 	public void testSort1() throws PolentaException {

@@ -5,9 +5,11 @@ import com.polenta.db.exception.PolentaException;
 public class Polenta {
 
 	private static final int DEFAULT_PORT = 3110;
+	
+	public static PolentaInstance polentaInstance;
 
 	public static void main(String[] args) throws Exception {
-		PolentaInstance polentaInstance = new PolentaInstance(extractPortFromArguments(args));
+		polentaInstance = new PolentaInstance(extractPortFromArguments(args));
 		polentaInstance.start();
 	}
 	

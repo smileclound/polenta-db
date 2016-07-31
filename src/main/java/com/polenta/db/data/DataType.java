@@ -25,7 +25,7 @@ public enum DataType {
 		}
 	}
 
-	static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
+	static SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("MM/dd/yyyy");
 	
 	protected Object convertString(String value) throws PolentaException {
 		return value.substring(1, value.length() - 1);

@@ -24,7 +24,7 @@ public class SocketProcessor implements Runnable {
 		String statement;
 		try {
 			statement = reader.readLine();
-			System.out.println("Statement received:\n" + statement);
+			System.out.println("\nStatement received: " + statement);
 			StatementProcessor processor = new StatementProcessor(statement.trim());
 			String result;
 			try {
@@ -36,7 +36,7 @@ public class SocketProcessor implements Runnable {
 				result = "Failed to process statement.";
 				e.printStackTrace();
 			}
-			System.out.println("Statement executed. Result:\n" + result);
+			System.out.println("Statement executed. Result: " + result);
 			writer.write(result);
 			writer.newLine();
 			writer.flush();
