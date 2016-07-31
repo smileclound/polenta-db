@@ -3,5 +3,3 @@ target/*
 .project
 
 .settings/*
->>>>>>> release/0.0.1-ALPHA
-/target/
