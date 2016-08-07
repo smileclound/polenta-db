@@ -1,16 +1,24 @@
 package com.polenta.db;
 
 import com.polenta.db.exception.PolentaException;
+import com.polenta.db.log.PolentaLogger;
 
 public class Polenta {
 
 	private static final int DEFAULT_PORT = 3110;
 	
-	public static PolentaInstance polentaInstance;
-
+	public static PolentaLogger logger;
+	
 	public static void main(String[] args) throws Exception {
-		polentaInstance = new PolentaInstance(extractPortFromArguments(args));
-		polentaInstance.start();
+		try {
+			PolentaLogger logger = new PolentaLogger(Polenta.extractLogLevelFromArguments(args));
+			
+			PolentaInstance polentaInstance = new PolentaInstance(Polenta.extractPortFromArguments(args), logger);
+			polentaInstance.start();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.exit(-1);
+		}
 	}
 	
 	protected static int extractPortFromArguments(String[] args) throws PolentaException {
@@ -28,6 +36,18 @@ public class Polenta {
 			}
 		}
 		return port;
+	}
+
+	protected static String extractLogLevelFromArguments(String[] args) throws PolentaException {
+		String level = null;
+		if (args != null && args.length > 0) {
+			for (String arg: args) {
+				if (arg.startsWith("--logLevel=")) {
+					level = arg.substring(11);
+				}
+			}
+		}
+		return level;
 	}
 	
 }

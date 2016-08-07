@@ -1,6 +1,6 @@
 package com.polenta.db.command.impl;
 
-import com.polenta.db.Polenta;
+import com.polenta.db.PolentaInstance;
 import com.polenta.db.command.Command;
 import com.polenta.db.exception.PolentaException;
 
@@ -14,7 +14,7 @@ public class AdminDatabaseCommand implements Command {
 
 	public String execute() throws PolentaException {
 		if (statement.toUpperCase().startsWith("SHUTDOWN")) {
-			Polenta.polentaInstance.shutdown();
+			PolentaInstance.self.shutdown();
 		}
 		return "OK";
 	}

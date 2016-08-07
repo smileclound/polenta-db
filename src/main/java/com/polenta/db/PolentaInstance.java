@@ -4,29 +4,42 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import com.polenta.db.exception.PolentaException;
+import com.polenta.db.log.PolentaLogger;
 import com.polenta.db.processor.SocketProcessor;
 
 public class PolentaInstance {
-
+	
+	public static PolentaInstance self;
+	public static PolentaLogger logger;
+	
 	private int port;
 	
-	protected PolentaInstance(int port) {
+	@SuppressWarnings("static-access")
+	protected PolentaInstance(int port, PolentaLogger logger) throws PolentaException {
+		if (this.self != null) {
+			throw new PolentaException("There is already an instance of Polenta running.");
+		}
+		
+		this.logger = logger;
 		this.port = port;
+		this.self = this;
 	}
 
 	ServerSocket serverSocket;
 
 	public final void start() {
-		System.out.println("Starting Polenta...");
-		System.out.println("Opening port " + this.port + ".");
+		PolentaInstance.logger.logSystem("Starting Polenta...");
+		PolentaInstance.logger.logSystem("Opening port " + this.port + ".");
+		PolentaInstance.logger.logSystem("Log level: " + PolentaInstance.logger.getLevel());
 		
 		try {
 			serverSocket = new ServerSocket(port);
 		} catch (IOException e) {
-			System.out.println("Impossible to open port " + this.port + ". Verify if it is not already in use.");
+			PolentaInstance.logger.logError("Impossible to open port " + this.port + ". Verify if it is not already in use.");
 			return;
 		}		
-		System.out.println("Polenta running and waiting for statements and commands!");
+		PolentaInstance.logger.logSystem("Polenta running and waiting for statements and commands!");
 		
 		while (true) {
 			try {
@@ -44,10 +57,10 @@ public class PolentaInstance {
 	public final void shutdown() {
 		try {
 			serverSocket.close();
-			System.out.println("Polenta shutdown in progress.");
+			PolentaInstance.logger.logSystem("Polenta shutdown in progress.");
 			System.exit(0);
 		} catch (IOException e) {
-			System.err.println("Polenta could not friendly close port + " + port + "!");
+			PolentaInstance.logger.logError("Polenta could not friendly close port + " + port + "!");
 		}
 	}
 	

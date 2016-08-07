@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import com.polenta.db.PolentaInstance;
+
 public class SocketProcessor implements Runnable {
 
 	private BufferedReader reader;
@@ -37,7 +39,7 @@ public class SocketProcessor implements Runnable {
 				statement = reader.readLine();
 				if (statement != null) {
 					socketIdleTime = 0;
-					System.out.println("\nStatement received: " + statement);
+					PolentaInstance.logger.logDebug("\nStatement received: " + statement);
 					StatementProcessor processor = new StatementProcessor(statement.trim());
 					String result = processor.execute();
 					writer.write(result);
@@ -50,7 +52,7 @@ public class SocketProcessor implements Runnable {
 				socketIdleTime = socketIdleTime + READ_TIMEOUT_FIVE_SECONDS;
 				if (socketIdleTime >= MAX_CONNECTION_IDLE_TIME) {
 					connected = false;
-					System.out.println("Socket client connection will be closed due to inactivity.");
+					PolentaInstance.logger.logInfo("Socket client connection will be closed due to inactivity.");
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -58,9 +60,9 @@ public class SocketProcessor implements Runnable {
 		}
 		try {
 			clientSocket.close();
-			System.out.println("Socket client connection has been closed.");
+			PolentaInstance.logger.logInfo("Socket client connection has been closed.");
 		} catch (Exception e) {
-			System.out.println("Failed to close socket client connection.");
+			PolentaInstance.logger.logInfo("Failed to close socket client connection.");
 		}
 	}
 
