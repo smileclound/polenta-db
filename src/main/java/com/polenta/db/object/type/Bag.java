@@ -23,7 +23,7 @@ public class Bag implements Insertable, Selectable, Storable {
 		
 		ResultSet resultSet;
 		if (orderByFields != null && !orderByFields.isEmpty()) {
-			List<Row> orderedRows = SortingExecutor.sort(filteredRows, orderByFields);
+			List<Row> orderedRows = SortingExecutor.sort(filteredRows, orderByFields.get(0));
 			resultSet = new ResultSet(selectFields, orderedRows);
 		} else {
 			resultSet = new ResultSet(selectFields, filteredRows);

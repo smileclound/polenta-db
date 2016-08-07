@@ -8,14 +8,14 @@ import com.polenta.db.sorting.Sorter;
 
 public class ShellSorter extends Sorter {
 
-	public List<Row> sort(List<Row> list, List<String> criterias) throws PolentaException {
+	public List<Row> sort(List<Row> list, String criteria) throws PolentaException {
 		int h = 1;
 		while (h < (list.size() / 3)) { 
 			h = (h * 3) + 1;
 		}
 		while (h >= 1) {
 			for (int i = h; i < list.size(); i++) {
-				for (int j = i; j >= h && (compare(list.get(j), list.get(j - h), criterias) < 0); j = j - h) {
+				for (int j = i; j >= h && (compare(list.get(j), list.get(j - h), criteria) < 0); j = j - h) {
 					exchange(list, j, j -h);
 				}
 			}

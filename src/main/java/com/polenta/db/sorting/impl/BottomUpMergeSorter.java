@@ -8,7 +8,7 @@ import com.polenta.db.sorting.Sorter;
 
 public class BottomUpMergeSorter extends Sorter {
 
-	public List<Row> sort(List<Row> list, List<String> criterias) throws PolentaException {
+	public List<Row> sort(List<Row> list, String criteria) throws PolentaException {
 		return list;
 	}
 
