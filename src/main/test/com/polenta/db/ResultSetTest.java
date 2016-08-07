@@ -15,22 +15,26 @@ public class ResultSetTest {
 	@Test
 	public void testFormatResultSetToTransport() {
 		Row map1 = new Row();
-		map1.set("NAME", "PEDRO");
+		map1.set("NAME", "PETER RICH");
 		map1.set("AGE", null);
 		
 		Row map2 = new Row();
-		map2.set("NAME", "TIAGO");
+		map2.set("NAME", "PAUL POOR");
 		map2.set("AGE", new Integer(38));
 		
 		List<Row> rows = new ArrayList<Row>();
 		rows.add(map1);
 		rows.add(map2);
 		
-		ResultSet resultSet = new ResultSet(rows);
+		List<String> fields = new ArrayList<String>();
+		fields.add("NAME");
+		fields.add("AGE");
+		
+		ResultSet resultSet = new ResultSet(fields, rows);
 		
 		String formatted = resultSet.toString();
 		
-		assertEquals("|NAME:'PEDRO',AGE:NULL|NAME:'TIAGO',AGE:38|", formatted);
+		assertEquals("NAME,AGE|NAME:PETER RICH,AGE:NULL|NAME:PAUL POOR,AGE:38|", formatted);
 		
 	}
 
