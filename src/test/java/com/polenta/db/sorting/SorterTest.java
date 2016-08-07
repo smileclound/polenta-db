@@ -3,7 +3,6 @@ package com.polenta.db.sorting;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -14,7 +13,7 @@ public class SorterTest {
 
 	class GenericSorter extends Sorter {
 		@Override
-		public List<Row> sort(List<Row> unsorted, List<String> criterias) {
+		public List<Row> sort(List<Row> unsorted, String criteria) {
 			return null;
 		}
 	}
@@ -26,10 +25,7 @@ public class SorterTest {
 		Row map1 = new Row();
 		Row map2 = new Row();
 		
-		List<String> criterias = new ArrayList<String>();
-		criterias.add("NAME");
-		
-		int compare = sorter.compare(map1, map2, criterias);
+		int compare = sorter.compare(map1, map2, "NAME");
 		assertEquals(0,  compare);
 	}
 
@@ -40,10 +36,7 @@ public class SorterTest {
 		Row map1 = new Row();
 		Row map2 = new Row();
 		
-		List<String> criterias = new ArrayList<String>();
-		criterias.add("NAME DESC");
-		
-		int compare = sorter.compare(map1, map2, criterias);
+		int compare = sorter.compare(map1, map2, "NAME DESC");
 		assertEquals(0,  compare);
 	}
 	
@@ -57,10 +50,7 @@ public class SorterTest {
 		Row map2 = new Row();
 		map2.set("NAME", null);
 		
-		List<String> criterias = new ArrayList<String>();
-		criterias.add("NAME");
-		
-		int compare = sorter.compare(map1, map2, criterias);
+		int compare = sorter.compare(map1, map2, "NAME");
 		assertEquals(0,  compare);
 	}
 
@@ -74,10 +64,7 @@ public class SorterTest {
 		Row map2 = new Row();
 		map2.set("NAME", null);
 
-		List<String> criterias = new ArrayList<String>();
-		criterias.add("NAME DESC");
-		
-		int compare = sorter.compare(map1, map2, criterias);
+		int compare = sorter.compare(map1, map2, "NAME DESC");
 		assertEquals(0,  compare);
 	}
 
@@ -91,10 +78,7 @@ public class SorterTest {
 		Row map2 = new Row();
 		map2.set("NAME", "A");
 		
-		List<String> criterias = new ArrayList<String>();
-		criterias.add("NAME");
-		
-		int compare = sorter.compare(map1, map2, criterias);
+		int compare = sorter.compare(map1, map2, "NAME");
 		assertEquals(-1,  compare);
 	}
 
@@ -108,10 +92,7 @@ public class SorterTest {
 		Row map2 = new Row();
 		map2.set("NAME", "A");
 		
-		List<String> criterias = new ArrayList<String>();
-		criterias.add("NAME DESC");
-		
-		int compare = sorter.compare(map1, map2, criterias);
+		int compare = sorter.compare(map1, map2, "NAME DESC");
 		assertEquals(1,  compare);
 	}
 	
@@ -125,10 +106,7 @@ public class SorterTest {
 		Row map2 = new Row();
 		map2.set("NAME", null);
 
-		List<String> criterias = new ArrayList<String>();
-		criterias.add("NAME");
-		
-		int compare = sorter.compare(map1, map2, criterias);
+		int compare = sorter.compare(map1, map2, "NAME");
 		assertEquals(1,  compare);
 	}
 
@@ -142,10 +120,7 @@ public class SorterTest {
 		Row map2 = new Row();
 		map2.set("NAME", null);
 
-		List<String> criterias = new ArrayList<String>();
-		criterias.add("NAME DESC");
-		
-		int compare = sorter.compare(map1, map2, criterias);
+		int compare = sorter.compare(map1, map2, "NAME DESC");
 		assertEquals(-1,  compare);
 	}
 	
@@ -159,10 +134,7 @@ public class SorterTest {
 		Row map2 = new Row();
 		map2.set("NAME", "Z");
 
-		List<String> criterias = new ArrayList<String>();
-		criterias.add("NAME");
-		
-		int compare = sorter.compare(map1, map2, criterias);
+		int compare = sorter.compare(map1, map2, "NAME");
 		assertTrue(compare < 0);
 	}
 	
@@ -176,10 +148,7 @@ public class SorterTest {
 		Row map2 = new Row();
 		map2.set("NAME", "Z");
 
-		List<String> criterias = new ArrayList<String>();
-		criterias.add("NAME DESC");
-		
-		int compare = sorter.compare(map1, map2, criterias);
+		int compare = sorter.compare(map1, map2, "NAME DESC");
 		assertTrue(compare > 0);
 	}
 
@@ -192,11 +161,8 @@ public class SorterTest {
 
 		Row map2 = new Row();
 		map2.set("NAME", "A");
-
-		List<String> criterias = new ArrayList<String>();
-		criterias.add("NAME");
 		
-		int compare = sorter.compare(map1, map2, criterias);
+		int compare = sorter.compare(map1, map2, "NAME");
 		assertTrue(compare > 0);
 	}
 	
@@ -210,10 +176,7 @@ public class SorterTest {
 		Row map2 = new Row();
 		map2.set("NAME", "A");
 
-		List<String> criterias = new ArrayList<String>();
-		criterias.add("NAME DESC");
-		
-		int compare = sorter.compare(map1, map2, criterias);
+		int compare = sorter.compare(map1, map2, "NAME DESC");
 		assertTrue(compare < 0);
 	}
 }

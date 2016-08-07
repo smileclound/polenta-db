@@ -10,17 +10,15 @@ import com.polenta.db.sorting.impl.ShellSorter;
 
 public class SortingExecutor {
 
-	public static List<Row> sort(List<Row> unsorted, List<String> criterias) throws PolentaException {
-		if (criterias == null || criterias.isEmpty()) {
+	public static List<Row> sort(List<Row> unsorted, String criteria) throws PolentaException {
+		if (criteria == null || criteria.equals("")) {
 			throw new PolentaException("ORDER BY requires fields.");
 		}
-		if (criterias.size() != 1) {
-			throw new PolentaException("ORDER BY does not support (yet!) more then a field.");
-		}
+
 		Sorter sorter = buildSorter(unsorted);
 		
 		if (sorter != null) {
-			return sorter.sort(unsorted, criterias);
+			return sorter.sort(unsorted, criteria);
 		} else {
 			throw new PolentaException("ORDER BY clausule could not be executed. No sorter found.");
 		}

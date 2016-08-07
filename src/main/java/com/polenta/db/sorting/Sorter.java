@@ -7,11 +7,10 @@ import com.polenta.db.exception.PolentaException;
 
 public abstract class Sorter {
 	
-	public abstract List<Row> sort(List<Row> unsorted, List<String> criterias) throws PolentaException;
+	public abstract List<Row> sort(List<Row> unsorted, String criteria) throws PolentaException;
 	
-	protected int compare(Row map1, Row map2, List<String> criterias) throws PolentaException {
+	protected int compare(Row map1, Row map2, String criteria) throws PolentaException {
 		//for now only one field is supported
-		String criteria = criterias.get(0);
 		String field = criteria.split(" ")[0];
 		String direction;
 		try {
