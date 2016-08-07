@@ -2,8 +2,6 @@ package com.polenta.db.processor;
 
 import com.polenta.db.command.Command;
 import com.polenta.db.command.CommandBuilder;
-import com.polenta.db.exception.InvalidStatementException;
-import com.polenta.db.exception.NotSupportedOperationException;
 
 public class StatementProcessor {
 	
@@ -13,23 +11,28 @@ public class StatementProcessor {
 		this.statement = statement;
 	}
 	
-	public String execute() throws Exception {
+	public String execute() {
 		if (this.statement == null || this.statement.trim().equals("")) {
-			throw new InvalidStatementException("Statement required.");
+			return "ERROR|Statement required.";
 		}
 
 		String[] words = statement.split(" ");
 		if (words.length == 0) {
-			throw new InvalidStatementException("Statement required.");
+			return "ERROR|Statement required.";
 		}
 		
 		Command command = CommandBuilder.getInstance().build(statement);
 		
 		if (command == null) { 
-			throw new NotSupportedOperationException("Operation not supported.");
+			return "ERROR|Operation not supported.";
 		}
 		
-		return command.execute();
+		try {
+			return "OK|" + command.execute();
+		} catch (Exception e) {
+			return "ERROR|" + e.getMessage();
+		}
+		
 	}
 
 }

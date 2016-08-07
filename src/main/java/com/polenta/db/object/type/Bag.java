@@ -19,23 +19,16 @@ public class Bag implements Insertable, Selectable, Storable {
 	
 	public ResultSet select(List<String> selectFields, Map<String, Object> whereConditions, List<String> orderByFields) throws PolentaException {
 		//missing: validate if fields used on all clausules are valids to this bag
-		
-		ResultSet resultSet = new ResultSet();
-		
 		List<Row> filteredRows = filterRows(this.rows, whereConditions);
 		
-		for (Row row: filteredRows) {
-			Row resultRow = new Row();
-			for (String field: selectFields) {
-				resultRow.set(field, row.get(field));
-			}
-			resultSet.add(resultRow);
-		}
-		
+		ResultSet resultSet;
 		if (orderByFields != null && !orderByFields.isEmpty()) {
-			resultSet = SortingExecutor.sort(resultSet, orderByFields);
+			List<Row> orderedRows = SortingExecutor.sort(filteredRows, orderByFields);
+			resultSet = new ResultSet(selectFields, orderedRows);
+		} else {
+			resultSet = new ResultSet(selectFields, filteredRows);
 		}
-		
+
 		return resultSet;
 	}
 	
