@@ -1,24 +1,18 @@
-package com.polenta.db.command.impl;
+package com.polenta.db.executor.impl;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.polenta.db.command.Command;
 import com.polenta.db.data.DataType;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
+import com.polenta.db.executor.StatementExecutor;
 import com.polenta.db.object.ObjectType;
 import com.polenta.db.store.Store;
 
-public class CreateCommand implements Command {
+public class CreateExecutor implements StatementExecutor {
 
-	private String statement;
-	
-	public void setStatement(String statement) {
-		this.statement = statement;
-	}
-
-	public String execute() throws PolentaException {
+	public String execute(String statement) throws PolentaException {
 		String objectType;
 		try {
 			objectType = statement.trim().toUpperCase().split(" ")[1];
@@ -35,7 +29,7 @@ public class CreateCommand implements Command {
 		if (objectName.contains("(") || objectName.contains(")") || objectName.contains(",")) {
 			throw new InvalidStatementException("Object name must be defined on CREATE statement.");
 		}
-		Map<String, DataType> objectDefinitions = extractObjectDefinitions();
+		Map<String, DataType> objectDefinitions = extractObjectDefinitions(statement);
 		if (objectDefinitions == null || objectDefinitions.isEmpty()) {
 			throw new InvalidStatementException("Fields must be defined on CREATE statement.");
 		}
@@ -51,10 +45,10 @@ public class CreateCommand implements Command {
 		return "OK";
 	}
 	
-	protected Map<String, DataType> extractObjectDefinitions() throws PolentaException {
+	protected Map<String, DataType> extractObjectDefinitions(String statement) throws PolentaException {
 		Map<String, DataType> definitions = new LinkedHashMap<String, DataType>();
 		try {
-			String definitionBlock = this.statement.substring(this.statement.indexOf("(") + 1, this.statement.indexOf(")"));
+			String definitionBlock = statement.substring(statement.indexOf("(") + 1, statement.indexOf(")"));
 			String[] fieldsList = definitionBlock.trim().split(",");
 			for (String fields: fieldsList) {
 				String[] fieldDefinitions = fields.trim().split(" ");

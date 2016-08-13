@@ -1,28 +1,21 @@
-package com.polenta.db.command.impl;
+package com.polenta.db.executor.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
-import com.polenta.db.command.Command;
 import com.polenta.db.data.DataType;
 import com.polenta.db.data.Row;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
+import com.polenta.db.executor.StatementExecutor;
 import com.polenta.db.object.behavior.Insertable;
 import com.polenta.db.store.Store;
 
-public class InsertCommand implements Command {
+public class InsertExecutor implements StatementExecutor {
 
-	private String statement;
-	
-	
-	public void setStatement(String statement) {
-		this.statement = statement;
-	}
-
-	public String execute() throws PolentaException {
+	public String execute(String statement) throws PolentaException {
 		String objectName;
 		try {
 			objectName = statement.trim().toUpperCase().split(" ")[2];
@@ -40,8 +33,8 @@ public class InsertCommand implements Command {
 			throw new InvalidStatementException("Object does not exist.");
 		}
 		
-		List<String> fields = extractFieldNames();
-		List<String> values = extractRawFieldValues();
+		List<String> fields = extractFieldNames(statement);
+		List<String> values = extractRawFieldValues(statement);
 		if (fields.size() != values.size()) {
 			throw new InvalidStatementException("Number of fields and values on INSERT statement need to match.");
 		}
@@ -65,10 +58,10 @@ public class InsertCommand implements Command {
 		return "OK";
 	}
 
-	public List<String> extractFieldNames() throws PolentaException {
+	public List<String> extractFieldNames(String statement) throws PolentaException {
 		List<String> fieldsList = new ArrayList<String>();
 		try {
-			String fieldsBlock = this.statement.toUpperCase().substring(this.statement.indexOf("(") + 1, this.statement.indexOf(")")); 
+			String fieldsBlock = statement.toUpperCase().substring(statement.indexOf("(") + 1, statement.indexOf(")")); 
 			String[] fields = fieldsBlock.split(",");
 			for (String field: fields) {
 				fieldsList.add(field.trim());
@@ -79,10 +72,10 @@ public class InsertCommand implements Command {
 		return fieldsList;
 	}
 	
-	public List<String> extractRawFieldValues() throws PolentaException {
+	public List<String> extractRawFieldValues(String statement) throws PolentaException {
 		List<String> valuesList = new ArrayList<String>();
 		try {
-			String valuesBlock = this.statement.toUpperCase().substring(this.statement.lastIndexOf("(") + 1, this.statement.lastIndexOf(")")); 
+			String valuesBlock = statement.toUpperCase().substring(statement.lastIndexOf("(") + 1, statement.lastIndexOf(")")); 
 			String[] values = valuesBlock.split(",");
 			for (String value: values) {
 				valuesList.add(value.trim());

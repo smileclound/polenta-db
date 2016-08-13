@@ -9,49 +9,42 @@ public class Logger {
 	
 	public enum Level {
 		DEBUG, 
-		INFO,
 		WARNING,
 		ERROR,
 		SYSTEM
 	}
 	
-	private static Level level;
+	private static Level logLevel;
 	
 	private Logger() {
 		
 	}
 
-	public static void init(String l) {
+	public static void init(String level) {
 		if (level == null) {
-			level = Level.SYSTEM;
+			logLevel = Level.SYSTEM;
 		} else {
-			level = Level.valueOf(l.toUpperCase());
-			if (level == null) {
-				level = Level.SYSTEM;
+			logLevel = Level.valueOf(level.toUpperCase());
+			if (logLevel == null) {
+				logLevel = Level.SYSTEM;
 			}
 		}
 	}
 
 	public static void logDebug(String log) {
-		if (level.ordinal() == Level.DEBUG.ordinal()) {
+		if (logLevel.ordinal() == Level.DEBUG.ordinal()) {
 			log(Level.DEBUG, log);
 		}
 	}
 
-	public static void logInfo(String log) {
-		if (level.ordinal() <= Level.INFO.ordinal()) {
-			log(Level.INFO, log);
-		}
-	}
-
 	public static void logWarning(String log) {
-		if (level.ordinal() <= Level.WARNING.ordinal()) {
+		if (logLevel.ordinal() <= Level.WARNING.ordinal()) {
 			log(Level.WARNING, log);
 		}
 	}
 
 	public static void logError(String log) {
-		if (level.ordinal() <= Level.ERROR.ordinal()) {
+		if (logLevel.ordinal() <= Level.ERROR.ordinal()) {
 			log(Level.ERROR, log);
 		}
 	}
@@ -65,11 +58,11 @@ public class Logger {
 	}
 
 	public static Level getLevel() {
-		return level;
+		return logLevel;
 	}
 	
-	public static void setLevel(Level l) {
-		level = l;
+	public static void setLevel(Level level) {
+		logLevel = level;
 	}
 
 }

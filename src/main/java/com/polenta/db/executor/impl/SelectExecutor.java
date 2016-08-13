@@ -1,4 +1,4 @@
-package com.polenta.db.command.impl;
+package com.polenta.db.executor.impl;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -7,23 +7,17 @@ import java.util.Map;
 
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
-import com.polenta.db.command.Command;
 import com.polenta.db.data.ResultSet;
 import com.polenta.db.exception.InvalidStatementException;
 import com.polenta.db.exception.PolentaException;
+import com.polenta.db.executor.StatementExecutor;
 import com.polenta.db.object.behavior.Selectable;
 import com.polenta.db.store.Store;
 
-public class SelectCommand implements Command {
+public class SelectExecutor implements StatementExecutor {
 
-	private String statement;
-	
-	public void setStatement(String statement) {
-		this.statement = statement.toUpperCase();
-	}
-
-	public String execute() throws PolentaException {
-		String objectName = extractObjectName();
+	public String execute(String statement) throws PolentaException {
+		String objectName = extractObjectName(statement);
 		if (objectName == null) {
 			throw new InvalidStatementException("SELECT statement must have a FROM clausule");
 		}
@@ -34,14 +28,14 @@ public class SelectCommand implements Command {
 			throw new InvalidStatementException("Object does not exist.");
 		}
 		
-		List<String> selectFields = extractSelectFields();
+		List<String> selectFields = extractSelectFields(statement);
 		if (selectFields == null || selectFields.isEmpty()) {
 			throw new InvalidStatementException("SELECT must list fields to be returned.");
 		}
 		
 		Map<String, Object> whereConditions = extractWhereConditions();
 		
-		List<String> orderByFields = extractOrderByFields();
+		List<String> orderByFields = extractOrderByFields(statement);
 		if (orderByFields.size() > 1) {
 			throw new InvalidStatementException("ORDER BY does not support (yet!) more than a field.");
 		}
@@ -63,7 +57,7 @@ public class SelectCommand implements Command {
 		return resultSet.toString();
 	}
 	
-	protected String extractObjectName() throws PolentaException {
+	protected String extractObjectName(String statement) throws PolentaException {
 		try {
 			if (statement.indexOf("FROM") == -1) {
 				return null;
@@ -82,7 +76,7 @@ public class SelectCommand implements Command {
 		return null;
 	}
 
-	protected List<String> extractSelectFields() throws PolentaException {
+	protected List<String> extractSelectFields(String statement) throws PolentaException {
 		List<String> fields = new ArrayList<String>();
 		try {
 			String selectFields = statement.trim().substring(statement.indexOf("SELECT") + 6, statement.indexOf("FROM"));
@@ -100,7 +94,7 @@ public class SelectCommand implements Command {
 		return conditions;
 	}
 
-	protected List<String> extractOrderByFields() throws PolentaException {
+	protected List<String> extractOrderByFields(String statement) throws PolentaException {
 		List<String> fields = new ArrayList<String>();
 		if (statement.indexOf("ORDER BY") == -1) {
 			return fields;

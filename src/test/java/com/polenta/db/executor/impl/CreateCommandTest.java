@@ -1,4 +1,4 @@
-package com.polenta.db.command.impl;
+package com.polenta.db.executor.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -7,17 +7,16 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.polenta.db.command.impl.CreateCommand;
 import com.polenta.db.data.DataType;
+import com.polenta.db.executor.impl.CreateExecutor;
 
 public class CreateCommandTest {
 
 	@Test
 	public void testCreateBagExtractDefinitions() throws Exception {
-		CreateCommand command = new CreateCommand();
-		command.setStatement("CREATE BAG (NAME STRING, BIRTH DATE, ZIP INTEGER, SALARY DOUBLE)");
+		CreateExecutor command = new CreateExecutor();
 		
-		Map<String, DataType> map = command.extractObjectDefinitions();
+		Map<String, DataType> map = command.extractObjectDefinitions("CREATE BAG (NAME STRING, BIRTH DATE, ZIP INTEGER, SALARY DOUBLE)");
 		
 		assertEquals(4, map.size());
 		
