@@ -1,5 +1,7 @@
 package com.polenta.db.executor.impl;
 
+import java.util.Map;
+
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
 import com.polenta.db.exception.InvalidStatementException;
@@ -10,7 +12,7 @@ import com.polenta.db.store.Store;
 
 public class UpdateExecutor implements StatementExecutor {
 
-	public String execute(String statement) throws PolentaException {
+	public Map<String, Object> execute(String statement) throws PolentaException {
 		String objectName;
 		try {
 			objectName = statement.trim().toUpperCase().split(" ")[1];
@@ -30,7 +32,7 @@ public class UpdateExecutor implements StatementExecutor {
 			throw new InvalidStatementException("UPDATE is not supported by this object type.");
 		}
 		
-		return "OK";
+		return success();
 	}
 
 }

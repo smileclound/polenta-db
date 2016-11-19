@@ -12,7 +12,7 @@ import com.polenta.db.store.Store;
 
 public class CreateExecutor implements StatementExecutor {
 
-	public String execute(String statement) throws PolentaException {
+	public Map<String, Object> execute(String statement) throws PolentaException {
 		String objectType;
 		try {
 			objectType = statement.trim().toUpperCase().split(" ")[1];
@@ -42,7 +42,7 @@ public class CreateExecutor implements StatementExecutor {
 		
 		Store.getInstance().add(type, objectName.toUpperCase(), objectDefinitions);
 		
-		return "OK";
+		return success();
 	}
 	
 	protected Map<String, DataType> extractObjectDefinitions(String statement) throws PolentaException {

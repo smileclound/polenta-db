@@ -16,7 +16,7 @@ import com.polenta.db.store.Store;
 
 public class SelectExecutor implements StatementExecutor {
 
-	public String execute(String statement) throws PolentaException {
+	public Map<String, Object> execute(String statement) throws PolentaException {
 		String objectName = extractObjectName(statement);
 		if (objectName == null) {
 			throw new InvalidStatementException("SELECT statement must have a FROM clausule");
@@ -54,7 +54,10 @@ public class SelectExecutor implements StatementExecutor {
 			throw new InvalidStatementException("INSERT is not supported by this object type.");
 		}
 		
-		return resultSet.toString();
+		Map<String, Object> map = success();
+		map.put("RESULT_SET", resultSet.toString());
+		
+		return map;
 	}
 	
 	protected String extractObjectName(String statement) throws PolentaException {

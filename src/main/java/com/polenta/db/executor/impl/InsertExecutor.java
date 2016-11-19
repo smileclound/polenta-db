@@ -2,6 +2,7 @@ package com.polenta.db.executor.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.polenta.db.catalog.Catalog;
 import com.polenta.db.catalog.CatalogItem;
@@ -15,7 +16,7 @@ import com.polenta.db.store.Store;
 
 public class InsertExecutor implements StatementExecutor {
 
-	public String execute(String statement) throws PolentaException {
+	public Map<String, Object> execute(String statement) throws PolentaException {
 		String objectName;
 		try {
 			objectName = statement.trim().toUpperCase().split(" ")[2];
@@ -55,7 +56,7 @@ public class InsertExecutor implements StatementExecutor {
 			throw new InvalidStatementException("INSERT is not supported by this object type.");
 		}
 		
-		return "OK";
+		return success();
 	}
 
 	public List<String> extractFieldNames(String statement) throws PolentaException {
