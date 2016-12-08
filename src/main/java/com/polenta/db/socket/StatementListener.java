@@ -47,7 +47,6 @@ public class StatementListener implements Runnable {
 					socketIdleTime = 0;
 					Logger.logDebug("\nStatement received: " + statement);
 					writer.writeObject(process(statement.toUpperCase()));
-					//writer.newLine();
 					writer.flush();
 				} else {
 					connected = false;

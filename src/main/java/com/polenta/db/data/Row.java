@@ -32,4 +32,8 @@ public class Row {
 		return columns.keySet();
 	}
 	
+	public Map<String, Object> asMap() {
+		return columns;
+	}
+	
 }

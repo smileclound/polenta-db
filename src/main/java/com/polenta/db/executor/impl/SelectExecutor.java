@@ -55,7 +55,8 @@ public class SelectExecutor implements StatementExecutor {
 		}
 		
 		Map<String, Object> map = success();
-		map.put("RESULT_SET", resultSet.toString());
+		map.put("FIELDS", resultSet.getFields());
+		map.put("ROWS", resultSet.getRows());
 		
 		return map;
 	}

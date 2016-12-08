@@ -1,50 +1,31 @@
 package com.polenta.db.data;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ResultSet {
-	
+
 	private List<String> fields;
-	private List<Row> rows;
+	private List<Map<String, Object>> rows;
 
 	public ResultSet(List<String> fields, List<Row> rows) {
-		this.fields = fields;
-		this.rows = rows;
+		this.fields = new LinkedList<String>();
+		this.fields.addAll(fields);
+		
+		this.rows = new LinkedList<Map<String,Object>>();
+		this.rows.addAll(rows.stream().map(row -> row.asMap()).collect(Collectors.toList())); 
 	}
-	
-	public String toString() {
-		if (this.rows.isEmpty()) {
-			return "EMPTY_RESULT_SET";
-		} else {
-			StringBuilder formatted = new StringBuilder("");
-			for (int i = 0; i < fields.size(); i++) {
-				formatted.append(fields.get(i));
-				if (i < (fields.size() -1)) {
-					formatted.append(",");	
-				}
-			}
-			formatted.append("|");
-			for (Row row: this.rows) {
-				String formattedRow = "";
-				for (String key: row.columnsSet()) {
-					Object value = row.get(key);
-					String formattedValue;
-					if (value == null) {
-						formattedValue = "NULL";
-					} else if (value.getClass().isAssignableFrom(String.class)) {
-						formattedValue = value.toString();
-					} else {
-						formattedValue = value.toString();
-					}
-					formattedRow += key + ":" + formattedValue + ",";
-				}
-				if (formattedRow.endsWith(",")) {
-					formattedRow = formattedRow.substring(0, formattedRow.length() -1);
-				}
-				formatted.append(formattedRow + "|");
-			}
-			return formatted.toString();
-		}
+
+	//TODO: return unmuttable object
+	public List<String> getFields() {
+		return fields;
+	}
+
+	//TODO: return unmuttable object
+	public List<Map<String, Object>> getRows() {
+		return rows;
 	}
 	
 }
